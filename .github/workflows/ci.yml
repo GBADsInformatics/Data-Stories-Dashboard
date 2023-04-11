@@ -30,4 +30,6 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
+          context: ./dash
+          file: ./dash/Dockerfile
           tags: gbadsinformatics/data-stories-dash:latest
