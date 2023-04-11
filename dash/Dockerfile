@@ -6,7 +6,7 @@ WORKDIR /app/dash
 
 # Installing python requirements
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN python3 -m pip install -r requirements.txt --no-cache-dir
 
 # Copy dash files to image
 COPY . /app/dash
