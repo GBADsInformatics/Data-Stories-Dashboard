@@ -76,14 +76,14 @@ page_1 = html.Div([
                                                 html.H5("Demographic",style={"margin":"0.4rem 0 0.2rem 0"}),
                                                 dcc.Dropdown(
                                                     id='demographic-dropdown',
-                                                    options=['National', 'Regional'],
+                                                    options=['National'],
                                                     value='National',
                                                     clearable=False,
                                                 ),
                                                 html.H5("Animal",style={"margin":"0.4rem 0 0.2rem 0"}),
                                                 dcc.Dropdown(
                                                     id='animal-dropdown',
-                                                    options=['Cattle'],
+                                                    options=['Cattle', 'Poultry'],
                                                     value='Cattle',
                                                     clearable=False,
                                                 ),

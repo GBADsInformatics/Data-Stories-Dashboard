@@ -31,6 +31,9 @@ from textwrap import dedent
 DATAFRAME = pd.read_csv('datasets/example_data.csv')
 CATTLE_DF = pd.read_csv('datasets/eth_csa_cattle_category.csv')
 CATTLE_HEALTH_DF = pd.read_csv('datasets/eth_csa_cattle_health.csv')
+POULTRY_INV_DF = pd.read_csv('datasets/eth_csa_poultry_inventory.csv')
+POULTRY_HEALTH_DF = pd.read_csv('datasets/eth_csa_poultry_health.csv')
+POULTRY_EGGS_DF = pd.read_csv('datasets/eth_csa_poultry_eggs.csv')
 
 # Insert data cleaning here
 COUNTRIES = sorted(DATAFRAME['Country'].unique())
@@ -272,7 +275,12 @@ def get_perc_sex_mortality_distribution_fig(demographic, animal, year):
 def get_cause_mortality_fig(demographic, animal, year):
     year_list = list(range(year[0], year[-1]+1))
 
-    df = filterdf(year_list,'year',CATTLE_HEALTH_DF)
+    if animal == 'Cattle':
+        table = CATTLE_HEALTH_DF
+    elif animal == 'Poultry':
+        table = POULTRY_HEALTH_DF
+
+    df = filterdf(year_list,'year',table)
     df = df[df.id == 0]
     df = df.sort_values(by='year')
     
@@ -354,6 +362,113 @@ def get_vaccinated_fig(demographic, animal, year):
 
     return fig
 
+def get_population_fig(demographic, animal, year):
+    year_list = list(range(year[0], year[-1]+1))
+
+    df = filterdf(year_list,'year',POULTRY_INV_DF)
+    df = df[df.id == 0]
+    df = df.sort_values(by='year')
+    
+    df['total'] = df[f'total_{animal.lower()}']
+    df['cocks'] = df['total_cocks']
+    df['cockerels'] = df['total_cockerels']
+    df['pullets'] = df['total_pullets']
+    df['non-laying hens'] = df['total_nonlaying_hens']
+    df['laying hens'] = df['total_laying_hens']
+    df['chicks'] = df['total_chicks']
+    df_melt = df.melt(id_vars='year', value_vars=['total', 'cocks', 'cockerels', 'pullets', 'non-laying hens', 'laying hens', 'chicks'], var_name='poultry type', value_name='population') 
+
+    # Creating graph
+    fig_title = f'{animal} Population by Type by {demographic}'
+
+    fig = px.line(
+        df_melt, 
+        x='year',
+        y='population',
+        color = 'poultry type',
+        labels={'year':'Year'},
+        title=fig_title,
+        color_discrete_sequence=px.colors.qualitative.Dark24,
+    )
+    
+    fig.update_layout(
+        margin={"r":10,"t":45,"l":10,"b":10},
+        font=dict(
+            size=16,
+        )
+    )
+    fig.layout.autosize = True
+
+    return fig
+
+def get_mortality_fig(demographic, animal, year):
+    year_list = list(range(year[0], year[-1]+1))
+
+    df = filterdf(year_list,'year',POULTRY_HEALTH_DF)
+    df = df[df.id == 0]
+    df = df.sort_values(by='year')
+
+    # Creating graph
+    fig_title = f'Total {animal} Mortality by {demographic}'
+
+    fig = px.line(
+        df, 
+        x='year',
+        y='total_deaths',
+        # color = 'poultry type',
+        labels={'year':'Year', 'total_deaths':'no. Deaths'},
+        title=fig_title,
+        color_discrete_sequence=px.colors.qualitative.Dark24,
+    )
+    
+    fig.update_layout(
+        margin={"r":10,"t":45,"l":10,"b":10},
+        font=dict(
+            size=16,
+        )
+    )
+    fig.layout.autosize = True
+
+    return fig
+
+def get_eggs_fig(demographic, year):
+    year_list = list(range(year[0], year[-1]+1))
+
+    df = filterdf(year_list,'year',POULTRY_EGGS_DF)
+    df = df[df.id == 0]
+    df = df.sort_values(by='year')
+
+    df.loc[df['total_egg_prod_indigenous'] == -1, 'total_egg_prod_indigenous'] = None
+    df.loc[df['total_egg_prod_hybrid'] == -1, 'total_egg_prod_hybrid'] = None
+    df.loc[df['total_egg_prod_exotic'] == -1, 'total_egg_prod_exotic'] = None
+    
+    df['indigenous'] = df['total_egg_prod_indigenous']
+    df['hybrid'] = df['total_egg_prod_hybrid']
+    df['exotic'] = df['total_egg_prod_exotic']
+    df_melt = df.melt(id_vars='year', value_vars=['indigenous', 'hybrid', 'exotic'], var_name='breed', value_name='Total Egg Production') 
+
+    # Creating graph
+    fig_title = f'Poultry Egg Population by Breed by {demographic}'
+
+    fig = px.line(
+        df_melt, 
+        x='year',
+        y='Total Egg Production',
+        color = 'breed',
+        labels={'year':'Year'},
+        title=fig_title,
+        color_discrete_sequence=px.colors.qualitative.Dark24,
+    )
+    
+    fig.update_layout(
+        margin={"r":10,"t":45,"l":10,"b":10},
+        font=dict(
+            size=16,
+        )
+    )
+    fig.layout.autosize = True
+
+    return fig
 
 # isLoggedIn = False
 # def requires_auth(f):
@@ -451,7 +566,7 @@ def init_callbacks(dash_app):
 
 
     ##################################
-    # Laying Hens Specific Callbacks #
+    # Mortality Specific Callbacks #
     ##################################
 
     # Update stored options
@@ -593,24 +708,48 @@ def init_callbacks(dash_app):
         Input('options-year-a', 'value'),
     )
     def create_graph(demographic, animal, table, year):
-
-        match table:
-            # case "test Poultry":
-            #     fig = get_poultry_fig(country, year)
-            case "Sex Distribution":
-                fig = get_sex_distribution_fig(demographic, animal, year)
-            case "Breed Sex Distribution":
-                fig = get_breed_sex_distribution_fig(demographic, animal, year)
-            case "Mortality Distribution":
-                fig = get_perc_mortality_distribution_fig(demographic, animal, year)
-            case "Mortality Distribution by Sex":
-                fig = get_perc_sex_mortality_distribution_fig(demographic, animal, year)
-            case "Mortality by Cause":
-                fig = get_cause_mortality_fig(demographic, animal, year)
-            case "Vaccination":
-                fig = get_vaccinated_fig(demographic, animal, year)
+        match animal:
+            case 'Cattle':
+                match table:
+                    # case "test Poultry":
+                    #     fig = get_poultry_fig(country, year)
+                    case 'Sex Distribution':
+                        fig = get_sex_distribution_fig(demographic, animal, year)
+                    case 'Breed Sex Distribution':
+                        fig = get_breed_sex_distribution_fig(demographic, animal, year)
+                    case 'Mortality Distribution':
+                        fig = get_perc_mortality_distribution_fig(demographic, animal, year)
+                    case 'Mortality Distribution by Sex':
+                        fig = get_perc_sex_mortality_distribution_fig(demographic, animal, year)
+                    case 'Mortality by Cause':
+                        fig = get_cause_mortality_fig(demographic, animal, year)
+                    case 'Vaccination':
+                        fig = get_vaccinated_fig(demographic, animal, year)
+            case 'Poultry':
+                match table:
+                    case 'Population':
+                        fig = get_population_fig(demographic, animal, year)
+                    case 'Total Mortality':
+                        fig = get_mortality_fig(demographic, animal, year)
+                    case 'Mortality by Cause':
+                        fig = get_cause_mortality_fig(demographic, animal, year)
+                    case 'Egg Production':
+                        fig = get_eggs_fig(demographic, year)
 
         return dcc.Graph(className='main-graph-size', id="main-graph", figure=fig)
+    
+    # Updating tables dropdown on animal change
+    @dash_app.callback(
+            Output('table-dropdown', 'options'),
+            Output('table-dropdown', 'value'),
+            Input('animal-dropdown', 'value'),
+    )
+    def update_table_dropdown(animal):
+        match animal:
+            case 'Cattle':
+                return ['Sex Distribution', 'Breed Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause', 'Vaccination'], 'Sex Distribution'
+            case 'Poultry':
+                return ['Population', 'Total Mortality', 'Mortality by Cause', 'Egg Production'], 'Population'
 
     # Updating Datatable
     @dash_app.callback(
