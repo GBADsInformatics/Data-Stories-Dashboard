@@ -3,6 +3,7 @@ import json
 from logging import disable
 from operator import gt
 from os.path import exists
+import os
 import requests
 import numpy as np
 import pandas as pd
@@ -26,6 +27,9 @@ from dash.dependencies import Input, Output, State
 # from dash_extensions.enrich import Output, DashProxy, Input, MultiplexerTransform
 import json
 from textwrap import dedent
+
+# dash base url
+DASH_BASE_URL = os.environ.get('DASH_BASE_URL',"/dash")+"/"
 
 # Importing dataset
 DATAFRAME = pd.read_csv('datasets/example_data.csv')
@@ -68,23 +72,35 @@ def filterdf(code, column, df):
 # JWT_PAYLOAD = 'jwt_payload'
 
 def init_dashboard(server):
-            
-    dash_app = dash.Dash(__name__,
-        server=server,
-        title='Template Dashboard',
-        routes_pathname_prefix="/dash/",
-        external_stylesheets=[
-            # 'https://codepen.io/chriddyp/pen/bWLwgP.css',
-            dbc.themes.BOOTSTRAP,
-            dbc.icons.BOOTSTRAP
-        ],
-    )
+    dash_app = None
+    if 'DASH_BASE_URL' in os.environ:
+        dash_app = dash.Dash(
+            __name__,
+            server=server,
+            title='GBADs Data Stories Dashbaord',
+            external_stylesheets=[
+                dbc.themes.BOOTSTRAP,
+                dbc.icons.BOOTSTRAP
+            ],
+            requests_pathname_prefix=os.environ['DASH_BASE_URL']+'/'
+        )
+    else:
+        dash_app = dash.Dash(
+            __name__,
+            server=server,
+            title='GBADs Data Stories Dashbaord',
+            external_stylesheets=[
+                dbc.themes.BOOTSTRAP,
+                dbc.icons.BOOTSTRAP
+            ],
+            routes_pathname_prefix="/dash/",
+        )
     # Setting active page
     dash_app.layout = html.Div([
         dcc.Location(id='url', refresh=False)
     ],id='page-content')
     init_callbacks(dash_app)
-    return dash_app.server
+    return dash_app
 
 #******************* Figure functions *******************# 
 def get_poultry_fig(country, year):
@@ -558,7 +574,7 @@ def init_callbacks(dash_app):
         Input('url', 'pathname')
     )
     def display_page(pathname):
-        if pathname == '/dash/':
+        if pathname == DASH_BASE_URL:
             layout = page_1
         else:
             layout = "404"

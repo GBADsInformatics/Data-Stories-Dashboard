@@ -31,7 +31,7 @@ AUTH0_CLIENT_SECRET = env.get('AUTH0_CLIENT_SECRET', None)
 AUTH0_DOMAIN = env.get('AUTH0_DOMAIN',"test-auth0-test1.us.auth0.com")
 AUTH0_BASE_URL = 'https://' + AUTH0_DOMAIN
 AUTH0_AUDIENCE = env.get('AUTH0_AUDIENCE', None)
-AUTH0_REDIRECT = env.get('AUTH0_REDIRECT',"/dash")
+AUTH0_REDIRECT = env.get('DASH_BASE_URL',"/dash")
 
 
 # @app.route('/')
@@ -76,9 +76,10 @@ AUTH0_REDIRECT = env.get('AUTH0_REDIRECT',"/dash")
 
 
 # Controllers API
-@app.route('/')
-def home():
-    return redirect(AUTH0_REDIRECT)
+if not "DASH_BASE_URL" in env:
+    @app.route('/')
+    def home():
+        return redirect(AUTH0_REDIRECT)
 
 
 # @app.route('/callback')
