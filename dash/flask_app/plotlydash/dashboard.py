@@ -77,7 +77,7 @@ def init_dashboard(server):
         dash_app = dash.Dash(
             __name__,
             server=server,
-            title='GBADs Data Stories Dashbaord',
+            title='GBADs Data Stories Dashboard',
             external_stylesheets=[
                 dbc.themes.BOOTSTRAP,
                 dbc.icons.BOOTSTRAP
@@ -88,7 +88,7 @@ def init_dashboard(server):
         dash_app = dash.Dash(
             __name__,
             server=server,
-            title='GBADs Data Stories Dashbaord',
+            title='GBADs Data Stories Dashboard',
             external_stylesheets=[
                 dbc.themes.BOOTSTRAP,
                 dbc.icons.BOOTSTRAP
