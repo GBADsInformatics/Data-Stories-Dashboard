@@ -30,6 +30,7 @@ selectedTabStyle = {
     'border': '3px solid white',
     'backgroundColor': 'white',
     'color': 'black'
+    # "color": "#FFA500"
 }
 
 # =================== PAGE LAYOUT =================== #
@@ -59,7 +60,7 @@ page_1 = html.Div([
                         html.Div(
                             className='tab-section',
                             children=[
-                                html.P('This section is to explain the purpose of your dashboard and what kind of data could be interpreted from it.',style={'margin-bottom':'0'})
+                                html.P('Graphs represent longitudinal analysis of the animal mortality and health data in Ethiopia National and Regional. Currently only Graphs tab contains relevant information',style={'margin-bottom':'0'})
                             ]
                         ),
                         html.Div(
@@ -76,7 +77,7 @@ page_1 = html.Div([
                                                 html.H5("Demographic",style={"margin":"0.4rem 0 0.2rem 0"}),
                                                 dcc.Dropdown(
                                                     id='demographic-dropdown',
-                                                    options=['National'],
+                                                    options=['National', 'Regional'],
                                                     value='National',
                                                     clearable=False,
                                                 ),

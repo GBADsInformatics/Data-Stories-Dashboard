@@ -28,4 +28,4 @@ def returnApp():
     return app.server
 
 if __name__ == "__main__":
-    app.run_server(host='0.0.0.0', port=env.get('PORT', 8055), use_reloader=True)
+    app.run_server(host='0.0.0.0', port=os.environ.get('PORT', 8055), use_reloader=True)

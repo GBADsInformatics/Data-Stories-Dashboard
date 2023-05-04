@@ -1,23 +1,8 @@
 # GBADS Data Stories Dashboard
 
-A dashboard template that allows users to start building a custom GBADs theme dashboard.
+This dashboard shows information that represent longitudinal analysis of the animal mortality and health data in Ethiopia National and Regional. Currently only Graphs tab contains relevant information
 
-## Parts of the template
-
-These are the main parts of this template. You will probably be making most of your edits in these files:
-
-#### [dashboard.py](https://github.com/GBADsInformatics/Dashboard_Template/blob/master/dash/flask_app/plotlydash/dashboard.py)
-
-This file includes all the callbacks for the components in the layouts.
-
-#### [layouts.py](https://github.com/GBADsInformatics/Dashboard_Template/blob/master/dash/layouts.py)
-
-The page layouts are made in this file. This is where all the dash components are found.
-
-#### [stylecheet.css](https://github.com/GBADsInformatics/Dashboard_Template/blob/master/dash/flask_app/plotlydash/assets/stylesheet.css)
-
-All the styling is done here. Most components already have custom CSS to go along with them but
-you can add more here.
+Data from ETH CSA Data Reports
 
 ## Build and Run Locally
 
@@ -44,13 +29,3 @@ Start the application
 ```bash
   python3 wsgi.py
 ```
-
-## Features
-
-- Fullscreen mode
-- Login/Logout
-
-## Authors
-
-- [@Amardeep](https://github.com/amardeep-1)
-- [@Nitin](https://github.com/Nitin501)
