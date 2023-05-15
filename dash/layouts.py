@@ -84,7 +84,7 @@ page_1 = html.Div([
                                                 html.H5("Animal",style={"margin":"0.4rem 0 0.2rem 0"}),
                                                 dcc.Dropdown(
                                                     id='animal-dropdown',
-                                                    options=['Cattle', 'Poultry', 'Sheep', 'Goats', 'Camels'],
+                                                    options=['Cattle', 'Poultry', 'Sheep', 'Goats', 'Camels', 'Horses', 'Donkeys', 'Mules'],
                                                     value='Cattle',
                                                     clearable=False,
                                                 ),

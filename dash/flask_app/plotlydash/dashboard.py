@@ -41,6 +41,12 @@ GOATS_CATEGORY_DF = pd.read_csv('datasets/eth_csa_goats_category.csv')
 GOATS_HEALTH_DF = pd.read_csv('datasets/eth_csa_goats_health.csv')
 CAMELS_CATEGORY_DF = pd.read_csv('datasets/eth_csa_camels_category.csv')
 CAMELS_HEALTH_DF = pd.read_csv('datasets/eth_csa_camels_health.csv')
+HORSES_CATEGORY_DF = pd.read_csv('datasets/eth_csa_horses_category.csv')
+HORSES_HEALTH_DF = pd.read_csv('datasets/eth_csa_horses_health.csv')
+DONKEYS_CATEGORY_DF = pd.read_csv('datasets/eth_csa_donkeys_category.csv')
+DONKEYS_HEALTH_DF = pd.read_csv('datasets/eth_csa_donkeys_health.csv')
+MULES_CATEGORY_DF = pd.read_csv('datasets/eth_csa_mules_category.csv')
+MULES_HEALTH_DF = pd.read_csv('datasets/eth_csa_mules_health.csv')
 POULTRY_INV_DF = pd.read_csv('datasets/eth_csa_poultry_inventory.csv')
 POULTRY_HEALTH_DF = pd.read_csv('datasets/eth_csa_poultry_health.csv')
 POULTRY_EGGS_DF = pd.read_csv('datasets/eth_csa_poultry_eggs.csv')
@@ -162,6 +168,12 @@ def get_sex_distribution_fig(demographic, animal, year):
             table = GOATS_CATEGORY_DF
         case 'Camels':
             table = CAMELS_CATEGORY_DF
+        case 'Horses':
+            table = HORSES_CATEGORY_DF
+        case 'Donkeys':
+            table = DONKEYS_CATEGORY_DF
+        case 'Mules':
+            table = MULES_CATEGORY_DF
 
     df = filterdf(year_list,'year',table)
     df = df[df.id == 0]
@@ -177,6 +189,9 @@ def get_sex_distribution_fig(demographic, animal, year):
         case 'Camels':
             df['male'] = df['male_lt_4yrs'] + df['male_gte_4yrs']
             df['female'] = df['female_lt_4yrs'] + df['female_gte_4yrs']
+        case 'Horses' | 'Donkeys' | 'Mules':
+            df['male'] = df['male_lt_3yrs'] + df['male_gte_3yrs']
+            df['female'] = df['female_lt_3yrs'] + df['female_gte_3yrs']
     df_melt = df.melt(id_vars='year', value_vars=['male', 'female'], var_name='Sex', value_name='Population') 
     
     # Creating graph
@@ -256,6 +271,12 @@ def get_perc_mortality_distribution_fig(demographic, animal, year):
             table = GOATS_HEALTH_DF
         case 'Camels':
             table = CAMELS_HEALTH_DF
+        case 'Horses':
+            table = HORSES_HEALTH_DF
+        case 'Donkeys':
+            table = DONKEYS_HEALTH_DF
+        case 'Mules':
+            table = MULES_HEALTH_DF
 
     df = filterdf(year_list,'year',table)
     df = df[df.id == 0]
@@ -305,6 +326,15 @@ def get_perc_sex_mortality_distribution_fig(demographic, animal, year):
         case 'Camels':
             table = CAMELS_CATEGORY_DF
             table2 = CAMELS_HEALTH_DF
+        case 'Horses':
+            table = HORSES_CATEGORY_DF
+            table2 = HORSES_HEALTH_DF
+        case 'Donkeys':
+            table = DONKEYS_CATEGORY_DF
+            table2 = DONKEYS_HEALTH_DF
+        case 'Mules':
+            table = MULES_CATEGORY_DF
+            table2 = MULES_HEALTH_DF
             
     df = filterdf(year_list,'year',table)
     df = df[df.id == 0]
@@ -325,6 +355,9 @@ def get_perc_sex_mortality_distribution_fig(demographic, animal, year):
         case 'Camels':
             df['male_total'] = df['male_lt_4yrs'] + df['male_gte_4yrs']
             df['female_total'] = df['female_lt_4yrs'] + df['female_gte_4yrs']
+        case 'Horses' | 'Donkeys' | 'Mules':
+            df['male_total'] = df['male_lt_3yrs'] + df['male_gte_3yrs']
+            df['female_total'] = df['female_lt_3yrs'] + df['female_gte_3yrs']
     df['male'] = healthdf['male_deaths'] / df['male_total'] *100
     df['female'] = healthdf['female_deaths'] / df['female_total'] * 100
     df_melt = df.melt(id_vars='year', value_vars=['male', 'female'], var_name='Sex', value_name='% Deaths') 
@@ -368,6 +401,12 @@ def get_cause_mortality_fig(demographic, animal, year):
             table = CAMELS_HEALTH_DF
         case 'Poultry':
             table = POULTRY_HEALTH_DF
+        case 'Horses':
+            table = HORSES_HEALTH_DF
+        case 'Donkeys':
+            table = DONKEYS_HEALTH_DF
+        case 'Mules':
+            table = MULES_HEALTH_DF
 
     df = filterdf(year_list,'year',table)
     df = df[df.id == 0]
@@ -1007,6 +1046,16 @@ def init_callbacks(dash_app):
                                 fig = get_cause_mortality_fig(demographic, animal, year)
                             case 'Vaccination':
                                 fig = get_vaccinated_fig(demographic, animal, year, "")
+                    case 'Horses' | 'Donkeys' | 'Mules': 
+                        match table:
+                            case 'Sex Distribution':
+                                fig = get_sex_distribution_fig(demographic, animal, year)
+                            case 'Mortality Distribution':
+                                fig = get_perc_mortality_distribution_fig(demographic, animal, year)
+                            case 'Mortality Distribution by Sex':
+                                fig = get_perc_sex_mortality_distribution_fig(demographic, animal, year)
+                            case 'Mortality by Cause':
+                                fig = get_cause_mortality_fig(demographic, animal, year)
                     case 'Poultry':
                         match table:
                             case 'Population':
@@ -1052,7 +1101,7 @@ def init_callbacks(dash_app):
     def update_dropdowns(demographic):
         match demographic:
             case 'National':
-                return ['Cattle', 'Poultry', 'Sheep', 'Goats', 'Camels'], 'Cattle'
+                return ['Cattle', 'Poultry', 'Sheep', 'Goats', 'Camels', 'Horses', 'Donkeys', 'Mules'], 'Cattle'
             case 'Regional':
                 return ['Cattle'], 'Cattle', 
             
@@ -1071,12 +1120,12 @@ def init_callbacks(dash_app):
                         return ['Sex Distribution', 'Breed Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause', 'Vaccination'], 'Sex Distribution'
                     case 'Poultry':
                         return ['Population', 'Total Mortality', 'Mortality by Cause', 'Egg Production'], 'Population'
-                    case 'Sheep':
-                        return ['Sex Distribution', 'Breed Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause', 'Vaccination'], 'Sex Distribution'
-                    case 'Goats':
+                    case 'Sheep' | 'Goats':
                         return ['Sex Distribution', 'Breed Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause', 'Vaccination'], 'Sex Distribution'
                     case 'Camels':
                         return ['Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause', 'Vaccination'], 'Sex Distribution'
+                    case 'Horses' | 'Donkeys' | 'Mules':
+                        return ['Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause'], 'Sex Distribution'
             case 'Regional':
                 return ['Male Population', 'Female Population', 'Male Mortality', 'Female Mortality', 'Mortality by Disease', 'Mortality by Other', 'Afar Vaccination', 'Amhara Vaccination', 'Oromia Vaccination', 'SNNP Vaccination'], 'Male Population'
                     
