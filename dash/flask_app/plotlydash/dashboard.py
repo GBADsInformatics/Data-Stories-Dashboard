@@ -905,7 +905,7 @@ def init_callbacks(dash_app):
     )
     def options_on_tab_change(selected_tab,stored_options):
         if stored_options is None:
-            return None, [2005, YEARS[-1]], [2005, YEARS[-1]]
+            return None, [2003, YEARS[-1]], [2005, YEARS[-1]]
         return stored_options['options-country'],\
             stored_options['options-year'],stored_options['options-year']
 
@@ -926,9 +926,9 @@ def init_callbacks(dash_app):
                 children=[
                     dcc.RangeSlider(
                         step=1, 
-                        min=2005,
+                        min=2003,
                         max=YEARS[-1],
-                        value=[2005, YEARS[-1]],
+                        value=[2003, YEARS[-1]],
                         marks=None,
                         id='options-year-a',
                         className='year-slider',
