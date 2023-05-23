@@ -1,0 +1,19 @@
+1,2
+About,"The Global Burden of Animal Disease Informatics Metadata provides information about how data can be accessed via the GBADs API, as well as other relevant information about the data. All metadata presented here pertains to the data after it was collected by GBADs (i.e. publication date on the GBADs API). This page provides a summary of metadata in a user-friendly format. To download the full metadata for this dataset select the ""download as json-ld"" button at the top of this page. More information about the original data set can be found via the World Organization for Animal Health (WOAH) WAHIS platform: [https://wahis.woah.org/](https://wahis.woah.org/)"
+Name,World Organization for Animal Health (WOAH) Livestock Population
+Identifier,[http://gbadske.org:9000/dataportal/](http://gbadske.org:9000/dataportal/)
+Publication Date,2022-06-03
+Creator,World Organization for Animal Health (WOAH)
+Contact Point,The Global Burden of Animal Disease Informatics 
+,metadata@gbadske.org
+Description,Livestock population numbers for each country from 2005 to 2018.
+Statistical Unit,Population in number of heads.
+Periodocity ,Annual
+License,[https://wahis.oie.int/#/tnc](https://wahis.oie.int/#/tnc)
+,"Section 2: ACKNOWLEDGMENT OF SOURCE The User shall identify the OIE as the source of the Data and clearly indicate if changes were made to the Data. Any identification of the OIE as the source of the Data shall include the following disclaimer : « The World Organisation for Animal Health (OIE) bears no responsibility for the integrity or accuracy of the data contained herein, in particular due, but not limited to, any deletion, manipulation, or reformatting of data that may have occurred beyond its control». The User must not distort, mutilate, modify or take other action in relation to the Data published on the OIE-WAHIS Platform that would be prejudicial to the reputation of the OIE. COPYRIGHT AND OWNERSHIP The OIE-WAHIS Platform contains copyrighted material and/or other proprietary information. OIE and/or its Members and non-Members are the sole and exclusive owners of all rights, title and interests, and other intellectual property rights in the Data and software of the OIE-WAHIS Platform."
+Language,English
+Date Modified,
+Species,"Birds, Cats, Cattle, Dogs, Equidae, Sheep/goats, Camelidae, Goats, Sheep, Buffaloes, Swine, Hares/Rabbits, Other species, Adult beef cattle, Adult goats, Adult pigs, Adult sheep, Domestic horses, Donkeys/ Mules/ Hinnies, Layers, Bees, Adult dairy cattle, Backyard poultry, Broilers, Calves, Cervidae, Kids, Lambs, Male and female cattle, Other commercial poultry, Rabbits, Backyard pigs, Commercial pigs, Hares, Turkeys, Fattening pigs, Piglets"
+Subject,Livestock population numbers 
+Temporal Coverage,Start: 2005; End: 2018
+Spatial Coverage,Data are reported by country. Countries are reported according to WOAH. 

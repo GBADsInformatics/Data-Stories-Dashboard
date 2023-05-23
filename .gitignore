@@ -1,8 +1,0 @@
-.env
-.pyc
-.txt
-**/env/
-**/__pycache__/
-
-*.vscode
-*.DS_Store

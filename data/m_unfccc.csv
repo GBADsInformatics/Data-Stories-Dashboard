@@ -1,0 +1,19 @@
+﻿1,2
+About,"The Global Burden of Animal Disease Informatics Metadata provides information about how data can be accessed via the GBADs API, as well as other relevant information about the data. All metadata presented here pertains to the data after it was collected by GBADs (i.e. publication date on the GBADs API). This page provides a summary of metadata in a user-friendly format. To download the full metadata for this dataset select the ""download as json-ld"" button at the top of this page. Information about terms used or to access FAOSTAT metadata for this dataset can be found here: [https://www.fao.org/faostat/en/#data/GE/metadata](https://www.fao.org/faostat/en/#data/GE/metadata) "
+Name,FAOSTAT UNFCCC (GE)
+Identifier,[http://gbadske.org:9000/dataportal/](http://gbadske.org:9000/dataportal/)
+Publication Date,2022-06-03
+Creator,The Food and Agriculture Organization of the United Nations 
+Contact Point,The Global Burden of Animal Disease Informatics 
+,metadata@gbadske.org 
+Description,"Livestock population numbers for each country from 1961-2019, with projections for 2030 and 2050 disseminated by the Food and Agriculture Organization of the United Nations (FAOSTAT) in the Greenhouse Gas Emissions, Enteric Fermentation dataset. This data is disseminated via the FAOSTAT GE dataset but is sourced from the United Nations Framework Convention on Climate Change (UNFCCC). For more information about how data are collected from the UNFCCC consult the (metadata)[https://www.fao.org/faostat/en/#data/GE/metadata]. Data were accessed by navigating to the [FAOSTAT GE data portal](https://www.fao.org/faostat/en/#data/GE), and selecting the 'stocks', and 'UNFCCC' as parameters."
+Statistical Unit,Population in number of heads.
+Periodocity ,Annual
+License,FAO Open Data for Statistical Databases Policy
+,[http://www.fao.org/3/ca7570en/ca7570en.pdf](http://www.fao.org/3/ca7570en/ca7570en.pdf)
+Language,English
+Date Modified,Data have not been modified since obtaining it from the source. The date modified will be updated if data gets modified. 
+Species,"Asses, Buffaloes, Camels, Cattle (dairy and non-dairy), Goats, Horses, Llamas, Mules, Sheep, Swine (breeding and market)"
+Subject,Livestock population numbers 
+Temporal Coverage,Start: 1961; End: 2019
+Spatial Coverage,Data are reported by country. Countries are reported in the M49 format as described in the original FAOSTAT metadata [https://www.fao.org/faostat/en/#data/GE/metadata](https://www.fao.org/faostat/en/#data/GE/metadata)

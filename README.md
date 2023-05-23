@@ -1,31 +1,51 @@
-# GBADS Data Stories Dashboard
+# Population Dashboard - Version 2
 
-This dashboard shows information that represent longitudinal analysis of the animal mortality and health data in Ethiopia National and Regional. Currently only Graphs tab contains relevant information
+The purpose of this dashboard is to visualize livestock population data from: 
+* FAOSTAT 
+    * QCL/Stocks dataset
+    * GE - FAOTIER 1 dataset
+    * GE - UNFCCC dataset
+* WOAH
+* EuroStat 
 
-Data from ETH CSA Data Reports
+## Running the app
 
-## Build and Run Locally
+* Ensure you have requirements.txt installed 
+* Run python index.py 
 
-Clone the project
+## Files and editting
 
-```bash
-  git clone https://link-to-project
+### File structure 
+
+```
+├─requirements.txt
+├─index.py
+├─utils/
+│ ├─get_data.py
+│ └─api_helpers.py
+├─README.md
+├─layouts/
+│ ├─metadata_tab.py
+│ ├─map_tab.py
+│ ├─layout.py
+│ ├─styling.py
+│ ├─data_tab.py
+│ ├─graph_helpers.py
+│ └─graph_tab.py
+├─app.py
+└─data/
+  ├─m_faostat.csv
+  ├─m_faotier1.csv
+  ├─oie.csv
+  ├─m_eurostat.csv
+  ├─faostat.csv
+  ├─unfccc.csv
+  ├─FAOSTAT_mappings.csv
+  ├─m_unfccc.csv
+  ├─world_map_110m.geojson
+  └─eurostat.csv
 ```
 
-Go to the project directory
+### Tabs 
 
-```bash
-  cd dash
-```
-
-Install dependencies
-
-```bash
-  pip3 install -r requirements.txt
-```
-
-Start the application
-
-```bash
-  python3 wsgi.py
-```
+The contents of each tab is in the layouts/ dir. 
