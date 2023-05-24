@@ -101,6 +101,16 @@ def update_all_dd(data):
 
     return(country_options, species_options, years, years) 
 
+# Initialize year slider 
+@app.callback(
+        Output('year', 'value'),
+        Output('year', 'min'),
+        Output('year', 'max'),
+        Input('tabs','active_tab'),
+    )
+def options_on_tab_change(at):
+    return [graph_tab.YEARS[0], graph_tab.YEARS[-1]], graph_tab.YEARS[0], graph_tab.YEARS[-1]
+ 
 # Update species 
 # @app.callback(
 #     Output('species','options'),
@@ -160,6 +170,43 @@ def dataset_drop(at):
 
     # return years, years
 
+# Updating tables dropdown on Demographic change
+@app.callback(
+        Output('animal', 'options'),
+        Output('animal', 'value'),
+        Input('demographic', 'value'),
+)
+def update_dropdowns(demographic):
+    match demographic:
+        case 'National':
+            return ['Cattle', 'Poultry', 'Sheep', 'Goats', 'Camels', 'Horses', 'Donkeys', 'Mules'], 'Cattle'
+        case 'Regional':
+            return ['Cattle'], 'Cattle', 
+        
+# Updating tables dropdown on animal change
+@app.callback(
+        Output('table', 'options'),
+        Output('table', 'value'),
+        Input('animal', 'value'),
+        Input('demographic', 'value'),
+)
+def update_table_dropdown(animal, demographic):
+    match demographic:
+        case 'National':
+            match animal:
+                case 'Cattle':
+                    return ['Sex Distribution', 'Breed Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause', 'Vaccination'], 'Sex Distribution'
+                case 'Poultry':
+                    return ['Population', 'Total Mortality', 'Mortality by Cause', 'Egg Production'], 'Population'
+                case 'Sheep' | 'Goats':
+                    return ['Sex Distribution', 'Breed Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause', 'Vaccination'], 'Sex Distribution'
+                case 'Camels':
+                    return ['Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause', 'Vaccination'], 'Sex Distribution'
+                case 'Horses' | 'Donkeys' | 'Mules':
+                    return ['Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause'], 'Sex Distribution'
+        case 'Regional':
+            return ['Male Population', 'Female Population', 'Male Mortality', 'Female Mortality', 'Mortality by Disease', 'Mortality by Other', 'Afar Vaccination', 'Amhara Vaccination', 'Oromia Vaccination', 'SNNP Vaccination'], 'Male Population'
+
 # Display metadata 
 @app.callback(
     Output('metadata-table','data'),
@@ -174,28 +221,109 @@ def get_metadata(data, at):
 
 # Display graph
 # Update graph
+# @app.callback(
+#     Output('graph1','figure'),
+#     Input('country','value'),
+#     Input('species','value'),
+#     Input('start year', 'value'),
+#     Input('end year', 'value'),
+#     Input('dataset','value'),
+#     Input('plot','value'))
+# def update_graph(country, species, start, end, data, plot):
+
+#     if type(country) == list and type(species) == list:
+#         raise PreventUpdate
+
+#     df = get_df(data)
+#     df = prep_df(df, country, species, start, end)
+
+#     if plot == 'stacked bar':
+#         fig = graph_tab.create_bar_plot(df, country, species)
+#     elif plot == 'scatter line':
+#         fig = graph_tab.create_scatter_plot(df, country, species)
+
+#     return(fig)
+
 @app.callback(
-    Output('graph1','figure'),
-    Input('country','value'),
-    Input('species','value'),
-    Input('start year', 'value'),
-    Input('end year', 'value'),
-    Input('dataset','value'),
-    Input('plot','value'))
-def update_graph(country, species, start, end, data, plot):
-
-    if type(country) == list and type(species) == list:
-        raise PreventUpdate
-
-    df = get_df(data)
-    df = prep_df(df, country, species, start, end)
-
-    if plot == 'stacked bar':
-        fig = graph_tab.create_bar_plot(df, country, species)
-    elif plot == 'scatter line':
-        fig = graph_tab.create_scatter_plot(df, country, species)
-
-    return(fig)
+    Output('graph1', 'figure'),
+    Input('demographic', 'value'),
+    Input('animal', 'value'),
+    Input('table', 'value'),
+    Input('year', 'value'),
+)
+def create_graph(demographic, animal, table, year):
+    match demographic:
+        case 'National':
+            match animal:
+                case 'Cattle' | 'Sheep' | 'Goats':
+                    match table:
+                        case 'Sex Distribution':
+                            fig = graph_tab.get_sex_distribution_fig(demographic, animal, year)
+                        case 'Breed Sex Distribution':
+                            fig = graph_tab.get_breed_sex_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution':
+                            fig = graph_tab.get_perc_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution by Sex':
+                            fig = graph_tab.get_perc_sex_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            fig = graph_tab.get_cause_mortality_fig(demographic, animal, year)
+                        case 'Vaccination':
+                            fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "")
+                case 'Camels': 
+                    match table:
+                        case 'Sex Distribution':
+                            fig = graph_tab.get_sex_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution':
+                            fig = graph_tab.get_perc_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution by Sex':
+                            fig = graph_tab.get_perc_sex_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            fig = graph_tab.get_cause_mortality_fig(demographic, animal, year)
+                        case 'Vaccination':
+                            fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "")
+                case 'Horses' | 'Donkeys' | 'Mules': 
+                    match table:
+                        case 'Sex Distribution':
+                            fig = graph_tab.get_sex_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution':
+                            fig = graph_tab.get_perc_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution by Sex':
+                            fig = graph_tab.get_perc_sex_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            fig = graph_tab.get_cause_mortality_fig(demographic, animal, year)
+                case 'Poultry':
+                    match table:
+                        case 'Population':
+                            fig = graph_tab.get_population_fig(demographic, animal, year)
+                        case 'Total Mortality':
+                            fig = graph_tab.get_mortality_fig(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            fig = graph_tab.get_cause_mortality_fig(demographic, animal, year)
+                        case 'Egg Production':
+                            fig = graph_tab.get_eggs_fig(demographic, year)
+        case 'Regional':
+            match table:
+                case 'Male Population':
+                    fig = graph_tab.get_population_fig_by_sex(demographic, animal, year, 'male')
+                case 'Female Population':
+                    fig = graph_tab.get_population_fig_by_sex(demographic, animal, year, 'female')
+                case 'Male Mortality':
+                    fig = graph_tab.get_perc_sex_mortality_distribution_fig_by_sex(demographic, animal, year, 'male')
+                case 'Female Mortality':
+                    fig = graph_tab.get_perc_sex_mortality_distribution_fig_by_sex(demographic, animal, year, 'female')
+                case 'Mortality by Disease':
+                    fig = graph_tab.get_disease_mortality_fig(demographic, animal, year)
+                case 'Mortality by Other':
+                    fig = graph_tab.get_other_mortality_fig(demographic, animal, year)
+                case 'Afar Vaccination':
+                    fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "AF")
+                case 'Amhara Vaccination':
+                    fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "AM")
+                case 'Oromia Vaccination':
+                    fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "OR")
+                case 'SNNP Vaccination':
+                    fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "SN")
+    return fig
 
 # Update data table 
 @app.callback(
