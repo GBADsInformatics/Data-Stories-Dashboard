@@ -713,7 +713,10 @@ content = dbc.Row(children=
             styling.sidebar,
             dcc.Loading(id = 'loading-icon',
                         children=[
-                        dbc.Col(graph)
+                        dbc.Col(children=[
+                            graph,
+                            styling.comment_section,
+                        ])
                         ]
                         )
             ],

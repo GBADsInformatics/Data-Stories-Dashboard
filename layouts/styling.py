@@ -11,7 +11,19 @@ SIDEBAR_STYLE = {
     "width": "21rem",
     "padding": "2rem 2rem 2rem",
     "background-color": "#f8f9fa",
-    "overflow": "scroll"
+    "overflow": "auto"
+}
+
+COMMENT_STYLE = {
+    "position": "fixed",
+    "top": "42rem",
+    "left": "21rem",
+    "bottom": "2rem",
+    "right": "2rem",
+    # "width": "21rem",
+    "padding": "2rem 2rem 2rem",
+    "background-color": "#f8f9fa",
+    "overflow": "auto"
 }
 
 CONTENT_STYLE_TABLES = {
@@ -196,4 +208,57 @@ sidebar_map = html.Div(
         ),
     ],
     style=SIDEBAR_STYLE,
+)
+
+comment_section = html.Div(
+    [
+        html.H4("Add a Comment"),
+        # html.Hr(),
+        # html.H6(" "),
+        html.Div([
+            html.H6("Table:", style={'display': 'inline-block', 'width':'7rem'}),
+            dcc.Input(id='comments_table',
+                type='text',
+                # placeholder='test',
+                value='test',
+                readOnly=True,
+                disabled = True,
+                style={'display': 'inline-block', 'width':'30rem'}
+            )
+        ]),
+        html.H6(" "),
+        html.Div([
+            html.H6("Subject:", style={'display': 'inline-block', 'width':'7rem'}),
+            dcc.Input(id='comments_subject',
+                type='text',
+                required=True,
+                style={'display': 'inline-block', 'width':'30rem'}
+            )
+        ]),
+        html.H6(" "),
+        html.H6("Message:"),
+        html.H6(" "),
+        dcc.Textarea(id='comments_body',
+            placeholder='Message',
+            required=True,
+            style={'width':'100%'},
+        ),
+        html.H6(" "),
+        html.Div([
+            html.H6("Name:", style={'display': 'inline-block', 'width':'5rem'}),
+            dcc.Input(id='comments_name',
+                type='text',
+                style={'display': 'inline-block', 'width':'20rem'}
+            ),
+            html.H6(" ", style={'display': 'inline-block', 'width':'4rem'}),
+            html.H6(" Email:", style={'display': 'inline-block', 'width':'5rem'}),
+            dcc.Input(id='comments_email',
+                type='text',
+                style={'display': 'inline-block', 'width':'20rem'}
+            )
+        ]),
+        html.H6(" "),
+        html.H6("Permission to Publish on Dashboard:"),
+    ],
+    style=COMMENT_STYLE,
 )
