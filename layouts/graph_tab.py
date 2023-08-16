@@ -715,7 +715,7 @@ content = dbc.Row(children=
                         children=[
                         dbc.Col(children=[
                             graph,
-                            styling.comment_section,
+                            styling.comment_area,
                         ])
                         ]
                         )

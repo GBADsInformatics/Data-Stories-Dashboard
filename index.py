@@ -4,14 +4,21 @@ import plotly
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_table
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 import pandas as pd
 import json
 from dash.exceptions import PreventUpdate
+from utils import newS3TicketLib as s3f
+from datetime import datetime
 
 from app import app
-from layouts import layout, data_tab, graph_tab, metadata_tab, map_tab
+from layouts import layout, data_tab, graph_tab, metadata_tab, map_tab, styling
+
+# Access AWS Credentials and establish session
+access, secret = s3f.get_keys('utils/')
+s3_resource = s3f.credentials_resource ( access, secret )
+s3_client = s3f.credentials_client ( access, secret )
 
 ###--------------Read in data-----------------------------------
 
@@ -325,6 +332,94 @@ def create_graph(demographic, animal, table, year):
                     fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "SN")
     return fig
 
+
+# comment table tabs
+@app.callback(
+        Output('comment-tabs-content', 'children'),
+        # Output('comments', 'children'),
+        [Input('comment-tabs', 'active_tab')]
+)
+def render_content(tab):
+    if tab == 'tab-0':
+        # empty approved folder
+        files = os.listdir('approved/')
+        for f in files:
+            os.remove('approved/'+f)
+
+        #get new comments
+        response = s3_client.list_objects_v2( Bucket='gbads-comments', Prefix='approved/')
+        for content in response.get('Contents', []):
+            # print(content['Key'])
+            if content['Key'] != 'approved/':
+                s3f.s3Download(s3_resource, 'gbads-comments', content['Key'], content['Key'])
+
+        # print(list)
+        arr = []
+        arr.append(html.H6('test'))
+        arr.append(html.H6('test2'))
+        return styling.comment_section
+    elif tab == 'tab-1':
+        return styling.comment_add
+
+# Comment table changing
+@app.callback(
+    Output('comments-table','value'),
+    Input('demographic', 'value'),
+    Input('animal', 'value'),
+    Input('table', 'value'),
+    Input('year', 'value'),
+)
+def update_comment_table(demographic, animal, table, year):
+    return f'{demographic} {animal} {table} {year[0]}-{year[-1]}'
+
+# Comment Submition
+@app.callback(
+        Output('com', 'children'),
+        # Output('comments-button', 'n_clicks'),
+        Output('comments-subject', 'value'),
+        Output('comments-message', 'value'),
+        Output('comments-name', 'value'),
+        Output('comments-email', 'value'),
+        Output('comments-isPublic', 'value'),
+        Input('comments-button', 'n_clicks'),
+        State('comments-table', 'value'),
+        State('comments-subject', 'value'),
+        State('comments-message', 'value'),
+        State('comments-name', 'value'),
+        State('comments-email', 'value'),
+        State('comments-isPublic', 'value'),
+)
+def submit_comment(n_clicks, table, subject, message, name, email, isPublic):
+    if subject == '':
+        return f'Subject is required', subject, message, name, email, isPublic;
+    if message == '':
+        return f'Message is required', subject, message, name, email, isPublic;
+    if n_clicks > 0:
+        # create comment file
+        created = datetime.now()
+        comment = {
+            "created": f'{created}',
+            "dashboard": 'Data Stories',
+            "table": table,
+            "subject": subject,
+            "message": message,
+            "name": name,
+            "email": email,
+            "isPublic": True if isPublic == "Yes" else False,
+            "reviewer": ''
+        }
+        filename = f'{created}.json'
+        with open(filename, "w") as outfile:
+            json.dump(comment, outfile)
+        # upload comment file
+        ret = s3f.s3Upload ( s3_resource, 'gbads-comments', filename, f"underreview/{filename}" )
+        #delete comment file
+        os.remove(filename)
+        if ( ret == -1 ):
+            return f'Error: Unable to submit comment', '', '', '', '', 'No';
+        return f'Submitted Successfully', '', '', '', '', 'No';
+    return f'', '', '', '', '', 'No';
+    
 # Update data table 
 @app.callback(
     Output('datatable','data'),

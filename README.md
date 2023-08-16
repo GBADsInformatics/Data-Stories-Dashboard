@@ -1,21 +1,22 @@
 # Population Dashboard - Version 2
 
-The purpose of this dashboard is to visualize livestock population data from: 
-* FAOSTAT 
-    * QCL/Stocks dataset
-    * GE - FAOTIER 1 dataset
-    * GE - UNFCCC dataset
-* WOAH
-* EuroStat 
+The purpose of this dashboard is to visualize livestock population data from:
+
+- FAOSTAT
+  - QCL/Stocks dataset
+  - GE - FAOTIER 1 dataset
+  - GE - UNFCCC dataset
+- WOAH
+- EuroStat
 
 ## Running the app
 
-* Ensure you have requirements.txt installed 
-* Run python index.py 
+- Ensure you have requirements.txt installed: pip3 install -r requirements.txt
+- Run python index.py
 
 ## Files and editting
 
-### File structure 
+### File structure
 
 ```
 ├─requirements.txt
@@ -46,6 +47,6 @@ The purpose of this dashboard is to visualize livestock population data from:
   └─eurostat.csv
 ```
 
-### Tabs 
+### Tabs
 
-The contents of each tab is in the layouts/ dir. 
+The contents of each tab is in the layouts/ dir.
