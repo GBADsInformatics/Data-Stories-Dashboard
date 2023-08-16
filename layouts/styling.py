@@ -1,0 +1,313 @@
+import dash_bootstrap_components as dbc
+from dash import html
+import dash_core_components as dcc
+from dash import dash_table
+
+SIDEBAR_STYLE = {
+    "position": "fixed",
+    "top": "8rem",
+    "left": 0,
+    "bottom": "1rem",
+    "width": "21rem",
+    "padding": "2rem 2rem 2rem",
+    "background-color": "#f8f9fa",
+    "overflow": "auto"
+}
+
+COMMENT_STYLE = {
+    "position": "fixed",
+    "top": "42rem",
+    "left": "21rem",
+    "bottom": "1rem",
+    "right": "2rem",
+    # "width": "21rem",
+    "padding": "2rem 2rem 2rem",
+    "background-color": "#f8f9fa",
+    "overflow": "auto"
+}
+
+CONTENT_STYLE_TABLES = {
+    "top":"8rem",
+    "margin-left": "20rem",
+    "margin-right": "7rem",
+    "bottom": "2rem",
+    "padding": "5rem 2rem 2rem",
+    "overflow": "scroll",
+    "position": "fixed"
+}
+
+CONTENT_STYLE_GRAPHS = {
+    "top":"4rem",
+    "margin-left": "20rem",
+    "margin-right": "7rem",
+    "bottom": "2rem",
+    "padding": "5rem 2rem 2rem",
+    "position": "fixed"
+}
+
+MAP_STYLE = {
+    "top":"8rem",
+    "margin-left": "20rem",
+    "margin-right": "7rem",
+    "bottom": "2rem",
+    "padding": "7rem 2rem 2rem",
+    "overflow": "scroll",
+}
+
+ACTIVE_TAB_STYLE = {
+    "color": "#FFA500"
+}
+
+plot_config = {'displayModeBar': True,
+          'displaylogo': False}
+
+sidebar_download = html.Div(
+    [
+        html.H4("Options"),
+        html.Hr(),
+        dbc.Nav(
+            [  
+                html.H6("Select multiple:", id='choice-title'),
+                dcc.RadioItems(
+                ['Species', 'Countries'], 'Species', inline=True, id='choice', persistence_type='session', persistence=True
+                ),
+                html.H6(" "),
+                html.H6("Dataset:"),
+                dcc.Dropdown(id = 'dataset', value='faostat', persistence_type='session', persistence=True),
+                html.H6(" "),
+                html.H6("Country:"),
+                dcc.Dropdown(id = 'country', value = 'Canada', persistence_type='session', persistence=True),
+                html.H6(" "),
+                html.H6("Species:"),
+                dcc.Dropdown(id = 'species', value = ['Cattle'], persistence_type='session', persistence=True),
+                html.H6(" "),
+                html.H6("Start year:"),
+                dcc.Dropdown(id = 'start year', value = 1996, persistence_type='session', persistence=True),
+                html.H6(" "),
+                html.H6("End year:"),
+                dcc.Dropdown(id = 'end year', value = 2020, persistence_type='session', persistence=True)
+            ],
+            vertical=True,
+            pills=True,
+        ),
+    ],
+    style=SIDEBAR_STYLE,
+)
+
+sidebar = html.Div(
+    [
+        html.H4("Options"),
+        html.Hr(),
+        dbc.Nav(
+            [  
+                html.H6("Demographic:"),
+                dcc.Dropdown(
+                    id='demographic',
+                    options=['National', 'Regional'],
+                    value='National',
+                    clearable=False,
+                    persistence_type='session', persistence=True
+                ),
+                html.H6(" "),
+                html.H6("Animal"),
+                dcc.Dropdown(
+                    id='animal',
+                    options=['Cattle', 'Poultry', 'Sheep', 'Goats', 'Camels', 'Horses', 'Donkeys', 'Mules'],
+                    value='Cattle',
+                    clearable=False,
+                    persistence_type='session', persistence=True
+                ),
+                html.H6(" "),
+                html.H6("Table"),
+                dcc.Dropdown(
+                    id='table',
+                    options=['Sex Distribution', 'Breed Sex Distribution', 'Mortality Distribution', 'Mortality Distribution by Sex', 'Mortality by Cause', 'Vaccination'],
+                    value='Sex Distribution',
+                    clearable=False,
+                    persistence_type='session', persistence=True
+                ),
+                html.H6(" "),
+                html.H6("Year"),
+                html.H6(" "),
+                dcc.RangeSlider(
+                    step=1, 
+                    marks=None,
+                    value=[0,0],
+                    id='year',
+                    className='year-slider',
+                    tooltip={"placement": "top", "always_visible": True},
+                    dots=True,
+                ),
+                # html.Div(
+                #     id='year-container-a',
+                #     children=[
+                #         html.H6("Table"),
+                #         html.Div(
+                #             className='year-slider-container',
+                #             children=[
+                #                 dcc.RangeSlider(
+                #                     step=1, 
+                #                     marks=None,
+                #                     value=[0,0],
+                #                     id='year',
+                #                     className='year-slider',
+                #                     tooltip={"placement": "top", "always_visible": True},
+                #                     dots=True,
+                #                 )
+                #             ]
+                #         ),
+                #     ],
+                # ),
+                # html.H6("Select multiple:", id='choice-title'),
+                # dcc.RadioItems(
+                # ['Species', 'Countries'], 'Species', inline=True, id='choice', persistence_type='session',persistence=True
+                # ),
+                # html.H6(" "),
+                # html.H6("Dataset:"),
+                # dcc.Dropdown(id = 'dataset', value='faostat', persistence_type='session', persistence=True),
+                # html.H6(" "),
+                # html.H6("Country:"),
+                # dcc.Dropdown(id = 'country', value = 'Canada', persistence_type='session', persistence=True),
+                # html.H6(" "),
+                # html.H6("Species:"),
+                # dcc.Dropdown(id = 'species', value = ['Cattle'],persistence_type='session', persistence=True),
+                # html.H6(" "),
+                # html.H6("Start year:"),
+                # dcc.Dropdown(id = 'start year', value = 1996, persistence_type='session', persistence=True),
+                # html.H6(" "),
+                # html.H6("End year:"),
+                # dcc.Dropdown(id = 'end year', value = 2020, persistence_type='session', persistence=True),
+                # html.H6(" "),
+                # html.H6("Graph type:"),
+                # dcc.Dropdown(id = 'plot', value = 'stacked bar', options = ['stacked bar','scatter line'], persistence_type='session', persistence=True),
+            ],
+            vertical=True,
+            pills=True,
+        ),
+    ],
+    style=SIDEBAR_STYLE,
+)
+
+sidebar_map = html.Div(
+    [
+        html.H4("Options"),
+        html.Hr(),
+        dbc.Nav(
+            [  
+                html.H6(" "),
+                html.H6("Dataset:"),
+                dcc.Dropdown(id = 'dataset', value = 'faostat', persistence_type='session', persistence=True),
+                html.H6(" "),
+                html.H6("Country:"),
+                dcc.Dropdown(id = 'country-map', value = 'Canada', multi=True,persistence_type='session', persistence=True),
+                html.H6(" "),
+                html.H6("Species:"),
+                dcc.Dropdown(id = 'species-map', value = 'Cattle', multi=False,persistence_type='session', persistence=True),
+                html.H6(" "),
+                html.H6("Year:"),
+                dcc.Dropdown(id = 'year-map', value = 1990,persistence_type='session', persistence=True),
+            ],
+            vertical=True,
+            pills=True,
+        ),
+    ],
+    style=SIDEBAR_STYLE,
+)
+
+comment_tabs = html.Div([
+    
+    html.H1(" "),
+    html.H2(" "),
+        dbc.Tabs(
+            [
+                dbc.Tab(label="Comment Section", active_label_style=ACTIVE_TAB_STYLE),
+                dbc.Tab(label="Add a Comment",active_label_style=ACTIVE_TAB_STYLE),
+            ],
+        id='comment-tabs', style={"padding": "1rem 1rem", "position":"fixed"})
+]
+)
+
+comment_area = html.Div(
+
+    children = [
+        dbc.Row(children=[
+            dbc.Col(comment_tabs),
+        ]),
+        dbc.Row(children = [html.Div(id='comment-tabs-content')]),
+        ]
+)
+
+comment_section = dbc.Row(children=
+    [
+        html.H4('Comment Section'),
+        html.Div(id='comments', children=[
+            html.H6('comment'),
+        ])
+    ],
+    style=COMMENT_STYLE,
+)
+
+comment_add = dbc.Row(children=
+    [
+        html.H4("Add a Comment"),
+        # html.Hr(),
+        # html.H6(" "),
+        html.Div([
+            html.H6("Table:", style={'display': 'inline-block', 'width':'7rem'}),
+            dcc.Input(id='comments-table',
+                type='text',
+                readOnly=True,
+                disabled = True,
+                style={'display': 'inline-block', 'width':'30rem'}
+            )
+        ]),
+        html.H6(" "),
+        html.Div([
+            html.H6("Subject:", style={'display': 'inline-block', 'width':'7rem'}),
+            dcc.Input(id='comments-subject',
+                type='text',
+                required=True,
+                style={'display': 'inline-block', 'width':'30rem'}
+            )
+        ]),
+        html.H6(" "),
+        html.H6("Message:"),
+        html.H6(" "),
+        dcc.Textarea(id='comments-message',
+            placeholder='Message',
+            required=True,
+            style={'width':'100%'},
+        ),
+        html.H6(" "),
+        html.Div([
+            html.H6("Name:", style={'display': 'inline-block', 'width':'5rem'}),
+            dcc.Input(id='comments-name',
+                type='text',
+                style={'display': 'inline-block', 'width':'20rem'}
+            ),
+            html.H6(" ", style={'display': 'inline-block', 'width':'4rem'}),
+            html.H6(" Email:", style={'display': 'inline-block', 'width':'5rem'}),
+            dcc.Input(id='comments-email',
+                type='text',
+                style={'display': 'inline-block', 'width':'20rem'}
+            )
+        ]),
+        html.H6(" "),
+        html.Div([
+            html.H6("Permission to Publish on Dashboard:", style={'display': 'inline-block', 'width':'23rem'}),
+            dcc.RadioItems(id='comments-isPublic',
+                options=['Yes', 'No'],
+                value='No',
+                inline=True,
+                style={'display': 'inline-block'}
+            ),
+        ]),
+        html.H6(""),
+        html.Button('SUBMIT', id='comments-button', n_clicks=0, style={'height':'2rem','width':'5rem'}),
+        html.H6(""),
+        html.Div(id='com',
+            children='Enter a value and press submit'),
+
+    ],
+    style=COMMENT_STYLE,
+)

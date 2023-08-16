@@ -1,9 +1,9 @@
 on:
   push:
-    branches: [ "main" , "master" ]
+    branches: ["main", "master"]
 
   workflow_dispatch:
-  
+
 jobs:
   docker:
     uses: GBADsInformatics/DevopsWorkflows/.github/workflows/docker.yml@main

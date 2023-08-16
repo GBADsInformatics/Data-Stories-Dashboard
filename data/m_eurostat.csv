@@ -1,0 +1,19 @@
+﻿1,2
+About,"The Global Burden of Animal Disease Informatics Metadata provides information about how data can be accessed via the GBADs API, as well as other relevant information about the data. All metadata presented here pertains to the data after it was collected by GBADs (i.e. publication date on the GBADs API). This page provides a summary of metadata in a user-friendly format. To download the full metadata for this dataset select the ""download as json-ld"" button at the top of this page. More information about the original data set can be found via the Eurostat Database Livestock Table (apro_mt_ls): [https://ec.europa.eu/eurostat/databrowser/explore/all/agric?lang=en&subtheme=agr.apro.apro_anip.apro_mt.apro_mt_ls&display=list&sort=category&extractionId=APRO_MT_LSCATL](https://ec.europa.eu/eurostat/databrowser/explore/all/agric?lang=en&subtheme=agr.apro.apro_anip.apro_mt.apro_mt_ls&display=list&sort=category&extractionId=APRO_MT_LSCATL)"
+Name,Eurostat Livestock Population
+Identifier,[http://gbadske.org:9000/dataportal/](http://gbadske.org:9000/dataportal/)
+Publication Date,2022-06-03
+Creator,Eurostat Livestock Population
+Contact Point,The Global Burden of Animal Disease Informatics 
+,metadata@gbadske.org
+Description,Livestock population numbers for each country reported by Eurostat from 1973-2021
+Statistical Unit,Population in number of heads.
+Periodocity ,Annual
+License,[https://ec.europa.eu/eurostat/about/policies/copyright](https://ec.europa.eu/eurostat/about/policies/copyright)
+,"Eurostat has a policy of encouraging free re-use of its data, both for non-commercial and commercial purposes. All statistical data, metadata, content of web pages or other dissemination tools, official publications and other documents published on its website, with the exceptions listed below, can be reused without any payment or written licence provided that: the source is indicated as Eurostat; when re-use involves modifications to the data or text, this must be stated clearly to the end user of the information."
+Language,English
+Date Modified,N/A
+Species,"Asses and Mules, Bovines, Equidae, Goats, Horses, Pigs, Sheep"
+Subject,Livestock population numbers 
+Temporal Coverage,Start: 1973; End: 2021
+Spatial Coverage,Data are reported by country. Countries are reported according to Eurostat. 
