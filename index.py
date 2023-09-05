@@ -333,6 +333,44 @@ def create_graph(demographic, animal, table, year):
     return fig
 
 
+divBorder = {
+    # "border": "2px solid black",
+    "border-radius": "1rem",
+    "background-color": "#ffffff",
+    "padding": "1rem 1rem",
+}
+
+commentHeading = {
+    "color": "#FFA500",
+    "display": "inline-block",
+    # "width":"10rem",
+    "padding": "0rem 2rem 0rem 0rem"
+}
+
+commentSubheading = {
+    "color": "#707070",
+    "display": "inline-block",
+
+}
+
+commentDate = {
+    "color": "#A0A0A0",
+    "display": "inline-block",
+    "float": "right",
+}
+
+COMMENT_STYLE = {
+    "position": "fixed",
+    "top": "42rem",
+    "left": "21rem",
+    "bottom": "1rem",
+    "right": "2rem",
+    # "width": "21rem",
+    "padding": "2rem 2rem 2rem",
+    "background-color": "#f8f9fa",
+    "overflow": "auto"
+}
+
 # comment table tabs
 @app.callback(
         Output('comment-tabs-content', 'children'),
@@ -347,17 +385,43 @@ def render_content(tab):
             os.remove('approved/'+f)
 
         #get new comments
+        child = []
+
         response = s3_client.list_objects_v2( Bucket='gbads-comments', Prefix='approved/')
         for content in response.get('Contents', []):
             # print(content['Key'])
             if content['Key'] != 'approved/':
                 s3f.s3Download(s3_resource, 'gbads-comments', content['Key'], content['Key'])
+                with open(content['Key']) as file:
+                    data = json.load(file)
+                    #append comment to list
+                    # if data['isPublic'] == True:
+                    #     child.append(html.H5(data['name']))
+                    # else:
+                    #     child.append(html.H5('Anonymous'))
+                    # child.append(html.H6(data['message']))
+                    # child.append(html.Br())
+                    child.append(html.Div(children=[
+                        html.H5(data['name'] if data['isPublic'] == True else 'Anonymous', style=commentHeading),
+                        html.H6(data['table'], style=commentSubheading),
+                        html.H6(data['created'][:-16], style=commentDate),
+                        html.H6(data['message']),
+                    ],
+                    style = divBorder
+                    ))
+                    child.append(html.Br())
 
         # print(list)
-        arr = []
-        arr.append(html.H6('test'))
-        arr.append(html.H6('test2'))
-        return styling.comment_section
+        # arr = []
+        # arr.append(html.H6('test'))
+        # arr.append(html.H6('test2'))
+        # print(child)
+        return dbc.Row(children=
+            [
+                html.Div(id='comments', children=child)
+            ],
+            style=COMMENT_STYLE,
+        )
     elif tab == 'tab-1':
         return styling.comment_add
 
@@ -399,7 +463,7 @@ def submit_comment(n_clicks, table, subject, message, name, email, isPublic):
         created = datetime.now()
         comment = {
             "created": f'{created}',
-            "dashboard": 'Data Stories',
+            "dashboard": 'datastories',
             "table": table,
             "subject": subject,
             "message": message,
