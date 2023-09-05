@@ -10,8 +10,6 @@ jobs:
     secrets: inherit
     with:
       IMAGE_NAME: data-stories-dash
-      CONTEXT: ./dash
-      DOCKERFILE: ./dash/Dockerfile
 
   aws:
     needs: docker
