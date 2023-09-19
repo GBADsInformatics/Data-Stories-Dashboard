@@ -386,23 +386,24 @@ COMMENT_STYLE = {
 def render_content(demographic, animal, table, year, tab):
     if tab == 'tab-0':
         # empty approved folder
-        files = os.listdir('approved/')
-        for f in files:
-            os.remove('approved/'+f)
+        # files = os.listdir('approved/')
+        # for f in files:
+        #     os.remove('approved/'+f)
 
         #get new comments
         conn = secure.connect_public()
         cur = conn.cursor()
         fieldstring = "created,tablename,subject,message,name,email,ispublic,reviewer"
-        querystring = f"dashboard='datastories' AND tablename='{demographic} {animal} {table} {year[0]}-{year[-1]}'"
+        #change to not include time
+        querystring = f"dashboard='datastories' AND tablename LIKE '{demographic} {animal} {table}%'"
         querystr = rds.setQuery ("gbads_comments", fieldstring, querystring, "")
-        table = rds.execute ( cur, querystr )
+        comments = rds.execute ( cur, querystr )
         conn.close()
-
+        print(comments)
         child = []
 
-        for row in table:
-            # print(row)
+        for row in comments:
+            print(row)
             child.append(html.Div(children=[
                 html.H5(row[4] if row[6] == True else 'Anonymous', style=commentHeading),
                 html.H6(row[1], style=commentSubheading),

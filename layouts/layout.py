@@ -42,7 +42,7 @@ CONTENT_STYLE = {
 
 title = html.Div([
                     html.Img(src=GBADSLOGOB, className="header-logo"),
-                    html.H2('Livestock Population')
+                    html.H2('Ethiopia Data Stories')
                 ],
                 style={"padding": "1rem 1rem", "position":"fixed"}
                 )

@@ -121,7 +121,7 @@ def get_sex_distribution_fig(demographic, animal, year):
     df_melt = df.melt(id_vars='year', value_vars=['male', 'female'], var_name='Sex', value_name='Population') 
     
     # Creating graph
-    fig_title = f'{animal} Sex Distribution by {demographic}'   
+    fig_title = f'{demographic} {animal} Sex Distribution'   
 
     fig = px.line(
         df_melt, 
@@ -163,7 +163,7 @@ def get_breed_sex_distribution_fig(demographic, animal, year):
     df_melt = df.melt(id_vars='year', value_vars=['male', 'female'], var_name='Sex', value_name='Population') 
     
     # Creating graph
-    fig_title = f'{animal} Breed Sex Distribution by {demographic}'   
+    fig_title = f'{demographic} {animal} Breed Sex Distribution'   
 
     fig = px.line(
         df_melt, 
@@ -213,7 +213,7 @@ def get_perc_mortality_distribution_fig(demographic, animal, year):
     df_melt = df.melt(id_vars='year', value_vars=['male', 'female'], var_name='Sex', value_name='% Deaths') 
     
     # Creating graph
-    fig_title = f'{animal} Mortality Distribution by total population and {demographic}'   
+    fig_title = f'{demographic} {animal} Mortality Distribution by total population'   
 
     fig = px.bar(
         df_melt, 
@@ -289,7 +289,7 @@ def get_perc_sex_mortality_distribution_fig(demographic, animal, year):
     df_melt = df.melt(id_vars='year', value_vars=['male', 'female'], var_name='Sex', value_name='% Deaths') 
 
     # Creating graph
-    fig_title = f'{animal} Mortality Distribution from sex population and {demographic}'   
+    fig_title = f'{demographic} {animal} Mortality Distribution from sex population'   
 
     fig = px.bar(
         df_melt, 
@@ -343,7 +343,7 @@ def get_cause_mortality_fig(demographic, animal, year):
     df_melt = df.melt(id_vars='year', value_vars=['disease', 'other'], var_name='% Death by', value_name='% Deaths') 
     
     # Creating graph
-    fig_title = f'{animal} Mortality Distribution by total population and {demographic}'   
+    fig_title = f'{demographic} {animal} Mortality Distribution by total population'   
 
     fig = px.bar(
         df_melt, 
@@ -424,7 +424,7 @@ def get_vaccinated_fig(demographic, animal, year, regionCode):
     df_melt = healthdf.melt(id_vars='year', value_vars=['total', 'anthrax', 'blackleg', 'pleuro pneumonia', 'hemorrhagic septicemia', 'rinderpest', 'other'], var_name='vaccination type', value_name='% vaccinated') 
 
     # Creating graph
-    fig_title = f'{region}Proportion of {animal} vaccinated against diseases by {demographic}'   
+    fig_title = f'{demographic} {region}Proportion of {animal} vaccinated against diseases'   
 
     fig = px.line(
         df_melt, 
@@ -460,7 +460,7 @@ def get_population_fig_by_sex(demographic, animal, year, sex):
     df = df.replace('OR', 'Orormia')
     df = df.replace('SN', 'SNNP')
     # Creating graph
-    fig_title = f'{sex.capitalize()} {animal} Population as Calculated from Age Population Statistics by {demographic}'
+    fig_title = f'{demographic} {sex.capitalize()} {animal} Population as Calculated from Age Population Statistics'
 
     fig = px.line(
         df, 
@@ -502,7 +502,7 @@ def get_perc_sex_mortality_distribution_fig_by_sex(demographic, animal, year, se
     df = df.replace('SN', 'SNNP')
 
     # Creating graph
-    fig_title = f'Percentage {sex.capitalize()} Mortality by {sex.capitalize()} {animal} Population and {demographic}'   
+    fig_title = f'{demographic} Percentage {sex.capitalize()} Mortality by {sex.capitalize()} {animal} Population'   
 
     fig = px.line(
         df, 
@@ -538,7 +538,7 @@ def get_disease_mortality_fig(demographic, animal, year):
     df = df.replace('SN', 'SNNP')
 
     # Creating graph
-    fig_title = f'{animal} Mortality by Disease and {demographic}'   
+    fig_title = f'{demographic} {animal} Mortality by Disease'   
 
     fig = px.line(
         df, 
@@ -574,7 +574,7 @@ def get_other_mortality_fig(demographic, animal, year):
     df = df.replace('SN', 'SNNP')
     
     # Creating graph
-    fig_title = f'{animal} Mortality by Non-Disease and {demographic}'   
+    fig_title = f'{demographic} {animal} Mortality by Non-Disease'   
 
     fig = px.line(
         df, 
@@ -614,7 +614,7 @@ def get_population_fig(demographic, animal, year):
     df_melt = df.melt(id_vars='year', value_vars=['total', 'cocks', 'cockerels', 'pullets', 'non-laying hens', 'laying hens', 'chicks'], var_name='poultry type', value_name='population') 
 
     # Creating graph
-    fig_title = f'{animal} Population by Type by {demographic}'
+    fig_title = f'{demographic} {animal} Population by Type'
 
     fig = px.line(
         df_melt, 
@@ -644,7 +644,7 @@ def get_mortality_fig(demographic, animal, year):
     df = df.sort_values(by='year')
 
     # Creating graph
-    fig_title = f'Total {animal} Mortality by {demographic}'
+    fig_title = f'{demographic} Total {animal} Mortality'
 
     fig = px.line(
         df, 
@@ -683,7 +683,7 @@ def get_eggs_fig(demographic, year):
     df_melt = df.melt(id_vars='year', value_vars=['indigenous', 'hybrid', 'exotic'], var_name='breed', value_name='Total Egg Production') 
 
     # Creating graph
-    fig_title = f'Poultry Egg Population by Breed by {demographic}'
+    fig_title = f'{demographic} Poultry Egg Population by Breed'
 
     fig = px.line(
         df_melt, 
