@@ -11,6 +11,8 @@ import json
 from dash.exceptions import PreventUpdate
 from utils import newS3TicketLib as s3f
 from datetime import datetime
+from utils import secure_rds as secure
+from utils import rds_functions as rds
 
 from app import app
 from layouts import layout, data_tab, graph_tab, metadata_tab, map_tab, styling
@@ -374,10 +376,14 @@ COMMENT_STYLE = {
 # comment table tabs
 @app.callback(
         Output('comment-tabs-content', 'children'),
+        Input('demographic', 'value'),
+        Input('animal', 'value'),
+        Input('table', 'value'),
+        Input('year', 'value'),
         # Output('comments', 'children'),
         [Input('comment-tabs', 'active_tab')]
 )
-def render_content(tab):
+def render_content(demographic, animal, table, year, tab):
     if tab == 'tab-0':
         # empty approved folder
         files = os.listdir('approved/')
@@ -385,31 +391,52 @@ def render_content(tab):
             os.remove('approved/'+f)
 
         #get new comments
+        conn = secure.connect_public()
+        cur = conn.cursor()
+        fieldstring = "created,tablename,subject,message,name,email,ispublic,reviewer"
+        querystring = f"dashboard='datastories' AND tablename='{demographic} {animal} {table} {year[0]}-{year[-1]}'"
+        querystr = rds.setQuery ("gbads_comments", fieldstring, querystring, "")
+        table = rds.execute ( cur, querystr )
+        conn.close()
+
         child = []
 
-        response = s3_client.list_objects_v2( Bucket='gbads-comments', Prefix='approved/')
-        for content in response.get('Contents', []):
-            # print(content['Key'])
-            if content['Key'] != 'approved/':
-                s3f.s3Download(s3_resource, 'gbads-comments', content['Key'], content['Key'])
-                with open(content['Key']) as file:
-                    data = json.load(file)
-                    #append comment to list
-                    # if data['isPublic'] == True:
-                    #     child.append(html.H5(data['name']))
-                    # else:
-                    #     child.append(html.H5('Anonymous'))
-                    # child.append(html.H6(data['message']))
-                    # child.append(html.Br())
-                    child.append(html.Div(children=[
-                        html.H5(data['name'] if data['isPublic'] == True else 'Anonymous', style=commentHeading),
-                        html.H6(data['table'], style=commentSubheading),
-                        html.H6(data['created'][:-16], style=commentDate),
-                        html.H6(data['message']),
-                    ],
-                    style = divBorder
-                    ))
-                    child.append(html.Br())
+        for row in table:
+            # print(row)
+            child.append(html.Div(children=[
+                html.H5(row[4] if row[6] == True else 'Anonymous', style=commentHeading),
+                html.H6(row[1], style=commentSubheading),
+                html.H6(row[0][:-9], style=commentDate),
+                html.H6(row[2]),
+                html.H6(row[3]),
+            ],
+            style = divBorder
+            ))
+            child.append(html.Br())
+
+        # response = s3_client.list_objects_v2( Bucket='gbads-comments', Prefix='approved/')
+        # for content in response.get('Contents', []):
+        #     # print(content['Key'])
+        #     if content['Key'] != 'approved/':
+        #         s3f.s3Download(s3_resource, 'gbads-comments', content['Key'], content['Key'])
+        #         with open(content['Key']) as file:
+        #             data = json.load(file)
+        #             #append comment to list
+        #             # if data['isPublic'] == True:
+        #             #     child.append(html.H5(data['name']))
+        #             # else:
+        #             #     child.append(html.H5('Anonymous'))
+        #             # child.append(html.H6(data['message']))
+        #             # child.append(html.Br())
+        #             child.append(html.Div(children=[
+        #                 html.H5(data['name'] if data['isPublic'] == True else 'Anonymous', style=commentHeading),
+        #                 html.H6(data['table'], style=commentSubheading),
+        #                 html.H6(data['created'][:-16], style=commentDate),
+        #                 html.H6(data['message']),
+        #             ],
+        #             style = divBorder
+        #             ))
+        #             child.append(html.Br())
 
         # print(list)
         # arr = []
