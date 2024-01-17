@@ -67,11 +67,11 @@ app.layout = layout.app_layout
 def render_content(tab):
     if tab == 'tab-0':
         return graph_tab.content
+    # elif tab == 'tab-1':
+    #     return map_tab.content
     elif tab == 'tab-1':
-        return map_tab.content
-    elif tab == 'tab-2':
        return data_tab.content
-    elif tab == 'tab-3':
+    elif tab == 'tab-2':
         return metadata_tab.metadata_content
 
 # Organize options of selecting multiple
@@ -255,6 +255,7 @@ def get_metadata(data, at):
 
 @app.callback(
     Output('graph1', 'figure'),
+    # Output('table1', 'figure'),
     Input('demographic', 'value'),
     Input('animal', 'value'),
     Input('table', 'value'),
@@ -334,6 +335,88 @@ def create_graph(demographic, animal, table, year):
                     fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "SN")
     return fig
 
+@app.callback(
+    Output('table1', 'figure'),
+    # Output('table1', 'figure'),
+    Input('demographic', 'value'),
+    Input('animal', 'value'),
+    Input('table', 'value'),
+    Input('year', 'value'),
+)
+def create_graph(demographic, animal, table, year):
+    match demographic:
+        case 'National':
+            match animal:
+                case 'Cattle' | 'Sheep' | 'Goats':
+                    match table:
+                        case 'Sex Distribution':
+                            fig = map_tab.get_sex_distribution_fig(demographic, animal, year)
+                        case 'Breed Sex Distribution':
+                            fig = graph_tab.get_breed_sex_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution':
+                            fig = graph_tab.get_perc_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution by Sex':
+                            fig = graph_tab.get_perc_sex_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            fig = graph_tab.get_cause_mortality_fig(demographic, animal, year)
+                        case 'Vaccination':
+                            fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "")
+                case 'Camels': 
+                    match table:
+                        case 'Sex Distribution':
+                            fig = map_tab.get_sex_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution':
+                            fig = graph_tab.get_perc_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution by Sex':
+                            fig = graph_tab.get_perc_sex_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            fig = graph_tab.get_cause_mortality_fig(demographic, animal, year)
+                        case 'Vaccination':
+                            fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "")
+                case 'Horses' | 'Donkeys' | 'Mules': 
+                    match table:
+                        case 'Sex Distribution':
+                            fig = map_tab.get_sex_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution':
+                            fig = graph_tab.get_perc_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality Distribution by Sex':
+                            fig = graph_tab.get_perc_sex_mortality_distribution_fig(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            fig = graph_tab.get_cause_mortality_fig(demographic, animal, year)
+                case 'Poultry':
+                    match table:
+                        case 'Population':
+                            fig = graph_tab.get_population_fig(demographic, animal, year)
+                        case 'Total Mortality':
+                            fig = graph_tab.get_mortality_fig(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            fig = graph_tab.get_cause_mortality_fig(demographic, animal, year)
+                        case 'Egg Production':
+                            fig = graph_tab.get_eggs_fig(demographic, year)
+        case 'Regional':
+            match table:
+                case 'Male Population':
+                    fig = graph_tab.get_population_fig_by_sex(demographic, animal, year, 'male')
+                case 'Female Population':
+                    fig = graph_tab.get_population_fig_by_sex(demographic, animal, year, 'female')
+                case 'Male Mortality':
+                    fig = graph_tab.get_perc_sex_mortality_distribution_fig_by_sex(demographic, animal, year, 'male')
+                case 'Female Mortality':
+                    fig = graph_tab.get_perc_sex_mortality_distribution_fig_by_sex(demographic, animal, year, 'female')
+                case 'Mortality by Disease':
+                    fig = graph_tab.get_disease_mortality_fig(demographic, animal, year)
+                case 'Mortality by Other':
+                    fig = graph_tab.get_other_mortality_fig(demographic, animal, year)
+                case 'Afar Vaccination':
+                    fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "AF")
+                case 'Amhara Vaccination':
+                    fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "AM")
+                case 'Oromia Vaccination':
+                    fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "OR")
+                case 'SNNP Vaccination':
+                    fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "SN")
+    return fig
+
 
 divBorder = {
     # "border": "2px solid black",
@@ -359,18 +442,6 @@ commentDate = {
     "color": "#A0A0A0",
     "display": "inline-block",
     "float": "right",
-}
-
-COMMENT_STYLE = {
-    "position": "fixed",
-    "top": "42rem",
-    "left": "21rem",
-    "bottom": "1rem",
-    "right": "2rem",
-    # "width": "21rem",
-    "padding": "2rem 2rem 2rem",
-    "background-color": "#f8f9fa",
-    "overflow": "auto"
 }
 
 # comment table tabs
@@ -448,7 +519,7 @@ def render_content(demographic, animal, table, year, tab):
             [
                 html.Div(id='comments', children=child)
             ],
-            style=COMMENT_STYLE,
+            style=styling.COMMENT_STYLE,
         )
     elif tab == 'tab-1':
         return styling.comment_add
@@ -516,62 +587,149 @@ def submit_comment(n_clicks, table, subject, message, name, email, isPublic):
 @app.callback(
     Output('datatable','data'),
     Output('datatable','columns'),
-    Input('dataset','value'),
-    Input('country','value'), 
-    Input('species','value'),
-    Input('start year', 'value'),
-    Input('end year', 'value'),
+    Input('demographic', 'value'),
+    Input('animal', 'value'),
+    Input('table', 'value'),
+    Input('year', 'value'),
     )
-def update_table(data, country, species, start, end):
+def update_table(demographic, animal, table, year):
+    match demographic:
+        case 'National':
+            match animal:
+                case 'Cattle' | 'Sheep' | 'Goats':
+                    match table:
+                        case 'Sex Distribution':
+                            df = data_tab.get_sex_distribution_df(demographic, animal, year)
+                        case 'Breed Sex Distribution':
+                            df = data_tab.get_breed_sex_distribution_df(demographic, animal, year)
+                        case 'Mortality Distribution':
+                            df = data_tab.get_perc_mortality_distribution_df(demographic, animal, year)
+                        case 'Mortality Distribution by Sex':
+                            df = data_tab.get_perc_sex_mortality_distribution_df(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            df = data_tab.get_cause_mortality_df(demographic, animal, year)
+                        case 'Vaccination':
+                            df = data_tab.get_vaccinated_df(demographic, animal, year, "")
+                case 'Camels': 
+                    match table:
+                        case 'Sex Distribution':
+                            df = data_tab.get_sex_distribution_df(demographic, animal, year)
+                        case 'Mortality Distribution':
+                            df = data_tab.get_perc_mortality_distribution_df(demographic, animal, year)
+                        case 'Mortality Distribution by Sex':
+                            df = data_tab.get_perc_sex_mortality_distribution_df(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            df = data_tab.get_cause_mortality_df(demographic, animal, year)
+                        case 'Vaccination':
+                            df = data_tab.get_vaccinated_df(demographic, animal, year, "")
+                case 'Horses' | 'Donkeys' | 'Mules': 
+                    match table:
+                        case 'Sex Distribution':
+                            df = data_tab.get_sex_distribution_df(demographic, animal, year)
+                        case 'Mortality Distribution':
+                            df = data_tab.get_perc_mortality_distribution_df(demographic, animal, year)
+                        case 'Mortality Distribution by Sex':
+                            df = data_tab.get_perc_sex_mortality_distribution_df(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            df = data_tab.get_cause_mortality_df(demographic, animal, year)
+                case 'Poultry':
+                    match table:
+                        case 'Population':
+                            df = data_tab.get_population_df(demographic, animal, year)
+                        case 'Total Mortality':
+                            df = data_tab.get_mortality_df(demographic, animal, year)
+                        case 'Mortality by Cause':
+                            df = data_tab.get_cause_mortality_df(demographic, animal, year)
+                        case 'Egg Production':
+                            df = data_tab.get_eggs_df(demographic, year)
+        case 'Regional':
+            match table:
+                case 'Male Population':
+                    df = data_tab.get_population_df_by_sex(demographic, animal, year, 'male')
+                case 'Female Population':
+                    df = data_tab.get_population_df_by_sex(demographic, animal, year, 'female')
+                case 'Male Mortality':
+                    df = data_tab.get_perc_sex_mortality_distribution_df_by_sex(demographic, animal, year, 'male')
+                case 'Female Mortality':
+                    df = data_tab.get_perc_sex_mortality_distribution_df_by_sex(demographic, animal, year, 'female')
+                case 'Mortality by Disease':
+                    df = data_tab.get_disease_mortality_df(demographic, animal, year)
+                case 'Mortality by Other':
+                    df = data_tab.get_other_mortality_df(demographic, animal, year)
+                case 'Afar Vaccination':
+                    df = data_tab.get_vaccinated_df(demographic, animal, year, "AF")
+                case 'Amhara Vaccination':
+                    df = data_tab.get_vaccinated_df(demographic, animal, year, "AM")
+                case 'Oromia Vaccination':
+                    df = data_tab.get_vaccinated_df(demographic, animal, year, "OR")
+                case 'SNNP Vaccination':
+                    df = data_tab.get_vaccinated_df(demographic, animal, year, "SN")
 
-    df = get_df(data)
-    df = prep_df(df, country, species, start, end)
+    # df = get_df(data)
+    # df = prep_df(df, country, species, start, end)
+    print(df)
     return df.to_dict('records'), [{"name": i, "id": i} for i in df.columns]
+
+# @app.callback(
+#     Output('datatable','data'),
+#     Output('datatable','columns'),
+#     Input('dataset','value'),
+#     Input('country','value'), 
+#     Input('species','value'),
+#     Input('start year', 'value'),
+#     Input('end year', 'value'),
+#     )
+# def update_table(data, country, species, start, end):
+
+#     df = get_df(data)
+#     df = prep_df(df, country, species, start, end)
+#     print(df)
+#     return df.to_dict('records'), [{"name": i, "id": i} for i in df.columns]
 
 # Update map
 # Update year option on map tab
-@app.callback(
-    Output('species-map','options'),
-    Output('country-map','options'),
-    Output('year-map','options'),
-    Input('dataset','value'),
-)
-def update_species_map(data): 
+# @app.callback(
+#     Output('species-map','options'),
+#     Output('country-map','options'),
+#     Output('year-map','options'),
+#     Input('dataset','value'),
+# )
+# def update_species_map(data): 
 
-    df = get_df(data)
+#     df = get_df(data)
     
-    country = df['country'].unique()
-    species = df['species'].unique()
-    df = df.sort_values(by=['year'])
-    year = df['year'].unique()
+#     country = df['country'].unique()
+#     species = df['species'].unique()
+#     df = df.sort_values(by=['year'])
+#     year = df['year'].unique()
 
-    return(species, country, year)
+#     return(species, country, year)
 
-@app.callback(
-    Output('map','figure'),
-    Input('dataset','value'),
-    Input('species-map','value'),
-    Input('country-map','value'),
-    Input('year-map', 'value'),
-    )
-def update_map(data, species, countries, year):
+# @app.callback(
+#     Output('map','figure'),
+#     Input('dataset','value'),
+#     Input('species-map','value'),
+#     Input('country-map','value'),
+#     Input('year-map', 'value'),
+#     )
+# def update_map(data, species, countries, year):
 
-    df = get_df(data)
-    merged_df = df.loc[df['year'] == year]
-    merged_df = merged_df.loc[merged_df['species'] == species]
+#     df = get_df(data)
+#     merged_df = df.loc[df['year'] == year]
+#     merged_df = merged_df.loc[merged_df['species'] == species]
 
-    if type(countries) == str:
-        merged_df = merged_df.loc[merged_df['country'] == countries]
-    else: 
-        merged_df = merged_df.loc[merged_df['country'].isin(countries)]
+#     if type(countries) == str:
+#         merged_df = merged_df.loc[merged_df['country'] == countries]
+#     else: 
+#         merged_df = merged_df.loc[merged_df['country'].isin(countries)]
 
-    fig = map_tab.create_map(merged_df, data, species, year)
+#     fig = map_tab.create_map(merged_df, data, species, year)
 
-    return(fig)
+#     return(fig)
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-    app.config['suppress_callback_exceptions'] = True
+    app.config.suppress.callback.exceptions = True
 
 # return the wsgi app
 def returnApp():

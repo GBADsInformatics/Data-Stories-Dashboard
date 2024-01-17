@@ -54,7 +54,6 @@ tabs = html.Div([
         dbc.Tabs(
             [
                 dbc.Tab(label="Graph", active_label_style=ACTIVE_TAB_STYLE),
-                dbc.Tab(label="Map",active_label_style=ACTIVE_TAB_STYLE),
                 dbc.Tab(label='Download Data', active_label_style=ACTIVE_TAB_STYLE),
                 dbc.Tab(label='Metadata', active_label_style=ACTIVE_TAB_STYLE)
             ],
@@ -64,16 +63,21 @@ tabs = html.Div([
 
 ###--------------Build the layout------------------------------------
 
-app_layout = html.Div(
+app_layout = dbc.Container(
 
-    children = [
-        dbc.Row(children = [
-            dbc.Col(title),
-            dbc.Col(tabs)
-        ]
+    [
+        dbc.Row(
+            [
+                dbc.Col(title, width=6),
+                dbc.Col(tabs, width='auto')
+            ]
         ),
-        dbc.Row(children = [html.Div(id='tabs-content')]),
-        dcc.Store(id='store')
-        ]
+        dbc.Row([
+           dbc.Col(html.Div(id='tabs-content'))
+           ]
+           ),
+        # dcc.Store(id='store')
+    ],
+    fluid=True
 )
 

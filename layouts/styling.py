@@ -14,6 +14,31 @@ SIDEBAR_STYLE = {
     "overflow": "auto"
 }
 
+# COMMENT_STYLE = {
+#     "position": "fixed",
+#     "top": "14rem",
+#     "left": "61rem",
+#     "bottom": "1rem",
+#     "right": "2rem",
+#     "width": "21rem",
+#     "padding": "2rem 2rem 2rem",
+#     "background-color": "#f8f9fa",
+#     "overflow": "auto"
+# }
+
+# TAB_STYLE = {
+#     "position": "fixed",
+#     "top": "8rem",
+#     "left": "61rem",
+#     "bottom": "1rem",
+#     "right": "2rem",
+#     "width": "21rem",
+#     "padding": "2rem 2rem 2rem",
+#     "background-color": "#f8f9fa",
+#     "overflow": "auto"
+# }
+
+
 COMMENT_STYLE = {
     "position": "fixed",
     "top": "42rem",
@@ -215,15 +240,12 @@ sidebar_map = html.Div(
 )
 
 comment_tabs = html.Div([
-    
-    html.H1(" "),
-    html.H2(" "),
-        dbc.Tabs(
-            [
-                dbc.Tab(label="Comment Section", active_label_style=ACTIVE_TAB_STYLE),
-                dbc.Tab(label="Add a Comment",active_label_style=ACTIVE_TAB_STYLE),
-            ],
-        id='comment-tabs', style={"padding": "1rem 1rem", "position":"fixed"})
+    dbc.Tabs(
+        [
+            dbc.Tab(label="Comment Section", active_label_style=ACTIVE_TAB_STYLE),
+            dbc.Tab(label="Add a Comment",active_label_style=ACTIVE_TAB_STYLE),
+        ],
+    id='comment-tabs', style={"padding": "1rem 1rem", "position":"fixed"})
 ]
 )
 
@@ -234,14 +256,14 @@ comment_area = html.Div(
             dbc.Col(comment_tabs),
         ]),
         dbc.Row(children = [html.Div(id='comment-tabs-content')]),
-        ]
+        ],
+        # style=TAB_STYLE
 )
 
 comment_section = dbc.Row(children=
     [
         html.H4('Comment Section'),
         html.Div(id='comments', children=[
-            html.H6('comment'),
         ])
     ],
     style=COMMENT_STYLE,
@@ -285,7 +307,7 @@ comment_add = dbc.Row(children=
                 type='text',
                 style={'display': 'inline-block', 'width':'20rem'}
             ),
-            html.H6(" ", style={'display': 'inline-block', 'width':'4rem'}),
+            # html.H6(" ", style={'display': 'inline-block', 'width':'4rem'}),
             html.H6(" Email:", style={'display': 'inline-block', 'width':'5rem'}),
             dcc.Input(id='comments-email',
                 type='text',

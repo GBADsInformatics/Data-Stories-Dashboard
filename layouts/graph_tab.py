@@ -710,7 +710,7 @@ graph = dcc.Graph(id = 'graph1', config = styling.plot_config)
 
 content = dbc.Row(children=
             [
-            styling.sidebar,
+            dbc.Col(styling.sidebar),
             dcc.Loading(id = 'loading-icon',
                         children=[
                         dbc.Col(children=[
