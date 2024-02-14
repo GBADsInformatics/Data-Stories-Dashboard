@@ -13,17 +13,6 @@ load_figure_template('LUX')
 
 GBADSLOGOB = "https://i0.wp.com/animalhealthmetrics.org/wp-content/uploads/2019/10/GBADs-LOGO-Black-sm.png"
 
-SIDEBAR_STYLE = {
-    "position": "fixed",
-    "top": "8rem",
-    "left": 0,
-    "bottom": "2rem",
-    "width": "24rem",
-    "padding": "2rem 2rem 2rem",
-    "background-color": "#f8f9fa",
-    "overflow": "scroll"
-}
-
 ACTIVE_TAB_STYLE = {
     "color": "#FFA500"
 }
@@ -55,7 +44,7 @@ tabs = html.Div([
             [
                 dbc.Tab(label="Graph", active_label_style=ACTIVE_TAB_STYLE),
                 dbc.Tab(label='Download Data', active_label_style=ACTIVE_TAB_STYLE),
-                dbc.Tab(label='Metadata', active_label_style=ACTIVE_TAB_STYLE)
+                # dbc.Tab(label='Metadata', active_label_style=ACTIVE_TAB_STYLE)
             ],
         id='tabs', style={"padding": "1rem 1rem", "position":"fixed"})
 ]

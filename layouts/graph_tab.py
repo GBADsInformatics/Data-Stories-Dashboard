@@ -8,7 +8,7 @@ import numpy as np
 from dash.dependencies import Input,Output
 from dash_bootstrap_templates import load_figure_template
 from dash import dash_table
-from layouts import styling 
+from layouts import styling, comments_section
 
 def create_bar_plot(df, country, species):
 
@@ -708,17 +708,27 @@ def get_eggs_fig(demographic, year):
 
 graph = dcc.Graph(id = 'graph1', config = styling.plot_config)
 
-content = dbc.Row(children=
+content = dbc.Row(
             [
             dbc.Col(styling.sidebar),
-            dcc.Loading(id = 'loading-icon',
-                        children=[
-                        dbc.Col(children=[
-                            graph,
-                            styling.comment_area,
-                        ])
-                        ]
-                        )
+            dbc.Col([
+                dcc.Loading(id = 'loading-icon',
+                        children=[graph]),
+                        comments_section.comment_area,
+                # html.Div("Test")
+            ]),
+            # dcc.Loading(id = 'loading-icon',
+            #             children=[
+            #             dbc.Col(children=[
+            #                 # graph,
+            #                 styling.comment_area,
+            #             ])
+            #             ]
+            #             )
+            # dbc.Col([
+            #     dbc.Row([graph]),
+            #     dbc.Row([styling.comment_area]),
+            # ])
             ],
             style=styling.CONTENT_STYLE_GRAPHS
         )

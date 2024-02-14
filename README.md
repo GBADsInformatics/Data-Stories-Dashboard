@@ -22,29 +22,25 @@ The purpose of this dashboard is to visualize livestock population data from:
 ├─requirements.txt
 ├─index.py
 ├─utils/
-│ ├─get_data.py
-│ └─api_helpers.py
+│ ├─get_data.py (to be deleted)
+│ ├─newS3TicketLib.py
+│ ├─rds_functions.py
+│ ├─secure_rds.py
+│ └─api_helpers.py (to be deleted)
 ├─README.md
 ├─layouts/
 │ ├─metadata_tab.py
-│ ├─map_tab.py
 │ ├─layout.py
 │ ├─styling.py
 │ ├─data_tab.py
-│ ├─graph_helpers.py
 │ └─graph_tab.py
 ├─app.py
 └─data/
   ├─m_faostat.csv
   ├─m_faotier1.csv
-  ├─oie.csv
   ├─m_eurostat.csv
-  ├─faostat.csv
-  ├─unfccc.csv
-  ├─FAOSTAT_mappings.csv
   ├─m_unfccc.csv
-  ├─world_map_110m.geojson
-  └─eurostat.csv
+  └─M_oie.csv
 ```
 
 ### Tabs
