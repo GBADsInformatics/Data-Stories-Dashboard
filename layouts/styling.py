@@ -5,7 +5,7 @@ from dash import dash_table
 
 SIDEBAR_STYLE = {
     "position": "fixed",
-    "top": "8rem",
+    "top": "9rem",
     "left": 0,
     "bottom": "1rem",
     "width": "21rem",
