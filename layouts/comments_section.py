@@ -19,6 +19,32 @@ ACTIVE_TAB_STYLE = {
     "color": "#FFA500"
 }
 
+divBorder = {
+    # "border": "2px solid black",
+    "border-radius": "1rem",
+    "background-color": "#ffffff",
+    "padding": "1rem 1rem",
+}
+
+commentHeading = {
+    "color": "#FFA500",
+    "display": "inline-block",
+    # "width":"10rem",
+    "padding": "0rem 2rem 0rem 0rem"
+}
+
+commentSubheading = {
+    "color": "#707070",
+    "display": "inline-block",
+
+}
+
+commentDate = {
+    "color": "#A0A0A0",
+    "display": "inline-block",
+    "float": "right",
+}
+
 comment_tabs = html.Div([
     dbc.Tabs(
         [
@@ -30,7 +56,6 @@ comment_tabs = html.Div([
 )
 
 comment_area = html.Div(
-
     children = [
         dbc.Row(children=[
             dbc.Col(comment_tabs),
@@ -40,20 +65,11 @@ comment_area = html.Div(
         # style=TAB_STYLE
 )
 
-comment_section = dbc.Row(children=
-    [
-        html.H4('Comment Section'),
-        html.Div(id='comments', children=[
-        ])
-    ],
-    style=COMMENT_STYLE,
-)
-
 comment_add = dbc.Row(children=
     [
         html.H4("Add a Comment"),
-        # html.Hr(),
-        # html.H6(" "),
+        html.Hr(),
+        html.H6(" "),
         html.Div([
             html.H6("Table:", style={'display': 'inline-block', 'width':'7rem'}),
             dcc.Input(id='comments-table',
@@ -107,8 +123,7 @@ comment_add = dbc.Row(children=
         html.H6(""),
         html.Button('SUBMIT', id='comments-button', n_clicks=0, style={'height':'2rem','width':'5rem'}),
         html.H6(""),
-        html.Div(id='com',
-            children='Enter a value and press submit'),
+        html.Div(id='com', children='Enter a value and press submit'),
 
     ],
     style=COMMENT_STYLE,

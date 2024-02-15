@@ -711,24 +711,24 @@ graph = dcc.Graph(id = 'graph1', config = styling.plot_config)
 content = dbc.Row(
             [
             dbc.Col(styling.sidebar),
-            dbc.Col([
-                dcc.Loading(id = 'loading-icon',
-                        children=[graph]),
-                        comments_section.comment_area,
-                # html.Div("Test")
-            ]),
+            # dbc.Col([
+            #     dcc.Loading(id = 'loading-icon',
+            #             children=[graph]),
+            #             comments_section.comment_area,
+            #     # html.Div("Test")
+            # ]),
             # dcc.Loading(id = 'loading-icon',
             #             children=[
             #             dbc.Col(children=[
-            #                 # graph,
-            #                 styling.comment_area,
+            #                 graph,
+            #                 comments_section.comment_area,
             #             ])
             #             ]
             #             )
-            # dbc.Col([
-            #     dbc.Row([graph]),
-            #     dbc.Row([styling.comment_area]),
-            # ])
+            dbc.Col([
+                graph,
+                comments_section.comment_area
+            ])
             ],
             style=styling.CONTENT_STYLE_GRAPHS
         )

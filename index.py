@@ -260,32 +260,6 @@ def create_graph(demographic, animal, table, year):
                     fig = graph_tab.get_vaccinated_fig(demographic, animal, year, "SN")
     return fig
 
-divBorder = {
-    # "border": "2px solid black",
-    "border-radius": "1rem",
-    "background-color": "#ffffff",
-    "padding": "1rem 1rem",
-}
-
-commentHeading = {
-    "color": "#FFA500",
-    "display": "inline-block",
-    # "width":"10rem",
-    "padding": "0rem 2rem 0rem 0rem"
-}
-
-commentSubheading = {
-    "color": "#707070",
-    "display": "inline-block",
-
-}
-
-commentDate = {
-    "color": "#A0A0A0",
-    "display": "inline-block",
-    "float": "right",
-}
-
 ############################## COMMENT CALLBACKS ##############################
 # comment table tabs
 @app.callback(
@@ -315,13 +289,13 @@ def render_content(demographic, animal, table, year, tab):
         for row in comments:
             print(row)
             child.append(html.Div(children=[
-                html.H5(row[4] if row[6] == True else 'Anonymous', style=commentHeading),
-                html.H6(row[1], style=commentSubheading),
-                html.H6(row[0][:-9], style=commentDate),
+                html.H5(row[4] if row[6] == True else 'Anonymous', style=comments_section.commentHeading),
+                html.H6(row[1], style=comments_section.commentSubheading),
+                html.H6(row[0][:-9], style=comments_section.commentDate),
                 html.H6(row[2]),
                 html.H6(row[3]),
             ],
-            style = divBorder
+            style = comments_section.divBorder
             ))
             child.append(html.Br())
         return dbc.Row(children=
