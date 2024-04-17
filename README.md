@@ -67,3 +67,27 @@ The purpose of this dashboard is to visualize livestock population/mortality/vac
 ### Tabs
 
 The contents of each tab is in the layouts/ dir.
+
+## Comments Section Guide
+
+### Files
+Files required for functionality:
+```
+├─requirements.txt       - Required dependancies
+├─index.py               - Contains the callbacks for the comments section
+├─utils/
+│ ├─newS3TicketLib.py    - To connect to the amazon services, access comments data
+│ ├─rds_functions.py
+│ └─secure_rds.py
+└─layouts/
+  └─comments_section.py  - Contains the dash/html/style components of the comments section
+```
+
+### How to add comments section into other dashboards
+1. Copy the `comments_section.py`, `newS3TicketLib.py`, `rds_functions.py`, `secure_rds.py` files or ensure that the functions are the same.
+2. Copy contents of the **"COMMENT CALLBACK"** section [lines 263-366], AWS session establishment [lines 20-23] and appropriate imports from the `index.py` file into the appropriate location in the new dashboard file structure (usually still index.py)
+3. Change the all callback input values to match the sidebar id values of the new dashboard.
+  - '''E.g. *update_comment_table*'s callback input value of **"demographic"** should match the appropriate sidebar id for the new dashboard (e.g. **demographic** changed to **choice** in the PopulationDasboardV2 because thats the first sidebar value id). Vice-versa for animal, table, year etc.'''
+
+4. Change dashboard entry in the *querystring* to the new dashbaord name (no spaces). The *tablename LIKE* part of the SQL query matches the how the tablename is stored in the comment file in the database. Ensure this format matches the string in *update_comment_table* callback function.
+5. Ensure dependencies from `requirements.txt` are added to the new dashaboard
