@@ -18,7 +18,7 @@ from app import app
 from layouts import layout, data_tab, graph_tab, metadata_tab, styling, comments_section
 
 # Access AWS Credentials and establish session
-access, secret = s3f.get_keys('utils/')
+access, secret = s3f.get_keys()
 s3_resource = s3f.credentials_resource ( access, secret )
 s3_client = s3f.credentials_client ( access, secret )
 
@@ -283,11 +283,10 @@ def render_content(demographic, animal, table, year, tab):
         querystr = rds.setQuery ("gbads_comments", fieldstring, querystring, "")
         comments = rds.execute ( cur, querystr )
         conn.close()
-        print(comments)
+
         child = []
 
         for row in comments:
-            print(row)
             child.append(html.Div(children=[
                 html.H5(row[4] if row[6] == True else 'Anonymous', style=comments_section.commentHeading),
                 html.H6(row[1], style=comments_section.commentSubheading),
@@ -448,9 +447,6 @@ def update_table(demographic, animal, table, year):
                 case 'SNNP Vaccination':
                     df = data_tab.get_vaccinated_df(demographic, animal, year, "SN")
 
-    # df = get_df(data)
-    # df = prep_df(df, country, species, start, end)
-    print(df)
     return df.to_dict('records'), [{"name": i, "id": i} for i in df.columns]
 
 if __name__ == '__main__':

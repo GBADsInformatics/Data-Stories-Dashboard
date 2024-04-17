@@ -80,9 +80,6 @@ def get_sex_distribution_df(demographic, animal, year):
     table_df.rename(columns={'year': 'Year', 'male': 'Male', 'female':'Female'}, inplace=True)
     table_df.insert(3, 'Calc. Total', df['male'] + df['female'])
     table_df.insert(4, 'Total', df[animal.lower()+'_total'])
-    # print(animal.lower + '_total')
-    # print(table_df.columns)
-    print(table_df)
 
     return table_df
 
